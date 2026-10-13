@@ -565,7 +565,7 @@ h1{font-size:21px}h1 span{font-size:9px}.header .small{padding:8px 9px;font-size
 }
 
 
-/* v8.9.3: 5段階の点数カラーを卓・一覧・最終結果へ共通適用。 */
+/* v8.9.4: 5段階の点数カラーを卓・一覧・最終結果へ共通適用。 */
 .table-seat.score-critical .seat-points,
 .score-card.score-critical .score,
 .result-points.score-critical{color:#ff565e;text-shadow:0 0 7px #ff364f99,0 0 17px #a8213455}
@@ -582,20 +582,33 @@ h1{font-size:21px}h1 span{font-size:9px}.header .small{padding:8px 9px;font-size
 .score-card.score-goal .score,
 .result-points.score-goal{color:#67f5b2;text-shadow:0 0 8px #44eeb6b2,0 0 19px #39d6a966}
 
+
+/* v8.9.4: 縦向き時だけ表示する横向き切替補助。強制回転は対応端末のみ。 */
+.landscape-recommendation{flex-wrap:wrap;gap:7px;justify-content:space-between;line-height:1.45}
+.landscape-hint{flex:1 1 175px}
+.landscape-try-button{flex:0 0 auto;min-height:34px;padding:5px 10px;border:1px solid #80d5af;border-radius:7px;background:#3d7b62;color:#fff;font-size:12px;font-weight:800}
+.landscape-try-button:focus-visible{outline:2px solid #e5fbeb;outline-offset:2px}
+.landscape-try-status{flex-basis:100%;font-size:11px;color:#d3eae1}
+@media(orientation:landscape){.landscape-recommendation{display:none!important}}
+
 </style>
-  <title>卓点 v8.9.3 — 西入・北入ルール対応</title>
+  <title>卓点 v8.9.4 — 西入・北入ルール対応</title>
 </head>
 <body>
   <div class="app-shell">
     <header class="header">
-      <div class="brand"><div class="logo">🀄</div><div><p class="eyebrow">v8.9.3 · 西入・北入・親自動判定</p><h1>卓点 <span>TAKUTEN</span></h1></div></div>
+      <div class="brand"><div class="logo">🀄</div><div><p class="eyebrow">v8.9.4 · 西入・北入・親自動判定</p><h1>卓点 <span>TAKUTEN</span></h1></div></div>
       <button id="shareButton" class="btn accent small">↗ 共有</button>
     </header>
 
     <div class="status-strip"><span id="statusDot" class="dot"></span><span id="statusLabel">端末に保存 · オフライン対応</span><span id="roomChip" class="room-chip" hidden></span><button id="connectButton" class="text-btn">共有ルーム</button></div>
 
     <div id="updateBanner" class="update-banner" hidden>アプリの更新を検出しました。<button id="updateReload" type="button">再読み込み</button></div>
-    <div class="landscape-recommendation" role="status">↻ スマホを横向きにすると、4人の点数を同じ大きさで表示できます</div>
+    <div class="landscape-recommendation" role="status">
+      <span class="landscape-hint">↻ 横画面で4人の点数を同じ大きさに表示します。端末の向きを変えるか、下のボタンを試してください。</span>
+      <button type="button" class="landscape-try-button" id="landscapeTryButton">横向きにする</button>
+      <span id="landscapeTryStatus" class="landscape-try-status" aria-live="polite"></span>
+    </div>
     <main>
       <div id="notice" class="notice" hidden role="status"></div>
       <div id="saveErrorBanner" class="save-error" role="alert" hidden><span>⚠ この端末に記録を保存できません。空き容量やプライベートモードをご確認ください。</span><button type="button" id="saveErrorBackup">バックアップ</button></div><div id="sharedActionBanner" class="shared-action-banner" role="status" hidden><span id="sharedActionText"></span><button type="button" id="dismissSharedAction" aria-label="通知を閉じる">×</button></div>
@@ -1159,7 +1172,7 @@ function updateOfflineReady() {
 async function verifyOfflineAssets(){
   if(!('caches' in window))return false;
   try{
-    const cache=await caches.open('takuten-static-v8-9-3');
+    const cache=await caches.open('takuten-static-v8-9-4');
     return !!(await cache.match(new URL('./index.html',location.href))) &&
            !!(await cache.match(new URL('./firebase-config.js',location.href)));
   }catch{return false;}
@@ -2211,8 +2224,8 @@ function boot() {
       .catch(()=>{offlineCacheReady=false;updateOfflineReady();});
     navigator.serviceWorker.addEventListener('controllerchange', async()=>{
       offlineCacheReady=await verifyOfflineAssets();updateOfflineReady();
-      if(navigator.onLine && !sessionStorage.getItem('takuten-v891-update-notice')){
-        sessionStorage.setItem('takuten-v891-update-notice','1');
+      if(navigator.onLine && !sessionStorage.getItem('takuten-v894-update-notice')){
+        sessionStorage.setItem('takuten-v894-update-notice','1');
         $('updateBanner').hidden=false;
       }
     });
@@ -2220,6 +2233,43 @@ function boot() {
   }
 }
 boot();
+
+
+
+/* v8.9.4: インストール済みアプリでは横向き固定を試みる（非対応端末では手動回転を案内）。
+   通常ブラウザーでは、明示ボタン操作を受けてから全画面表示と画面回転を試す。 */
+function setupLandscapeAssistance(){
+  const button=document.getElementById('landscapeTryButton');
+  const status=document.getElementById('landscapeTryStatus');
+  if(!button||!status)return;
+  const isPortrait=()=>window.matchMedia('(orientation: portrait)').matches;
+  const isInstalled=()=>window.matchMedia('(display-mode: standalone)').matches || navigator.standalone===true;
+  const fallback='この端末では自動切替ができません。画面の回転ロックを解除し、スマホを横向きにしてください。';
+  const showHint=()=>{if(!isPortrait())status.textContent='';};
+  window.addEventListener('orientationchange',showHint,{passive:true});
+  window.addEventListener('resize',showHint,{passive:true});
+  // 通常ブラウザーのページ読み込みでは全画面化しない。インストール済みアプリでのみ試行する。
+  if(isInstalled() && isPortrait() && typeof screen.orientation?.lock==='function'){
+    Promise.resolve().then(()=>screen.orientation.lock('landscape')).catch(()=>{});
+  }
+  button.addEventListener('click',async()=>{
+    if(!isPortrait()){status.textContent='すでに横画面で表示されています。';return;}
+    button.disabled=true;
+    status.textContent='横向きへの切り替えを試しています…';
+    try{
+      if(typeof screen.orientation?.lock!=='function')throw new Error('not supported');
+      // 向きのロックには全画面表示が必要な端末がある。
+      if(!isInstalled() && !document.fullscreenElement && document.fullscreenEnabled && document.documentElement.requestFullscreen){
+        await document.documentElement.requestFullscreen();
+      }
+      await screen.orientation.lock('landscape');
+      status.textContent=isPortrait()?fallback:'横向きで表示できました。';
+    }catch{
+      status.textContent=fallback;
+    }finally{button.disabled=false;}
+  });
+}
+setupLandscapeAssistance();
 
 </script>
 </body>

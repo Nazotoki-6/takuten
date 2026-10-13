@@ -1,5 +1,5 @@
-/* 卓点 v8.9.3: 配信更新後はネット優先で最新を確認し、圏外ではキャッシュで起動。 */
-const CACHE_NAME = 'takuten-static-v8-9-3';
+/* 卓点 v8.9.4: 配信更新後はネット優先で最新を確認し、圏外ではキャッシュで起動。 */
+const CACHE_NAME = 'takuten-static-v8-9-4';
 const ASSETS = ['./','./index.html','./firebase-config.js','./manifest.webmanifest','./icon-192.png','./icon-512.png','./icon-180.png'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS)).then(() => self.skipWaiting()));
