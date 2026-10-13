@@ -1,0 +1,27 @@
+{
+  "id": "./",
+  "name": "卓点 — 麻雀スコア管理",
+  "short_name": "卓点",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#071b18",
+  "theme_color": "#071b18",
+  "lang": "ja",
+  "description": "卓点 v8.9.3。スマートフォン横向きの自動卓表示、焼き鳥・順位差・オフライン単独利用に対応。",
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "orientation": "landscape"
+}

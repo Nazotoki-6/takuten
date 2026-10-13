@@ -1,0 +1,16 @@
+{
+  "rules": {
+    "rooms": {
+      "$roomId": {
+        ".read": "auth != null && $roomId.matches(/^[A-HJ-NP-Z2-9]{10}$/)",
+        ".write": "auth != null && $roomId.matches(/^[A-HJ-NP-Z2-9]{10}$/) && newData.exists() && (!data.exists() || (data.child('revision').exists() && newData.child('revision').val() === data.child('revision').val() + 1) || (!data.child('revision').exists() && newData.child('revision').val() === 1))",
+        ".validate": "newData.hasChildren(['version', 'revision', 'players', 'startingPoints', 'dealerId', 'handNo', 'honba', 'sticks', 'updatedAt']) && newData.child('version').val() === 1 && newData.child('revision').isNumber() && newData.child('revision').val() >= 0 && newData.child('players').hasChildren(['0', '1', '2']) && newData.child('startingPoints').isNumber() && newData.child('startingPoints').val() >= 1000 && newData.child('startingPoints').val() <= 100000 && newData.child('dealerId').isString() && newData.child('handNo').isNumber() && newData.child('handNo').val() >= 1 && newData.child('honba').isNumber() && newData.child('honba').val() >= 0 && newData.child('honba').val() <= 99 && newData.child('sticks').isNumber() && newData.child('sticks').val() >= 0 && newData.child('sticks').val() <= 40 && newData.child('updatedAt').isNumber()",
+        "players": {
+          "$playerIndex": {
+            ".validate": "newData.hasChildren(['id', 'name', 'points']) && newData.child('id').isString() && newData.child('name').isString() && newData.child('name').val().length > 0 && newData.child('name').val().length <= 18 && newData.child('points').isNumber() && newData.child('points').val() >= -1000000 && newData.child('points').val() <= 1000000"
+          }
+        }
+      }
+    }
+  }
+}

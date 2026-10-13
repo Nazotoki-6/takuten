@@ -1,0 +1,2226 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#071b18">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="卓点">
+  <link rel="apple-touch-icon" href="./icon-180.png">
+  <link rel="icon" href="./icon-192.png" type="image/png">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <meta name="description" content="麻雀の点数をタップで記録し、同じ卓の全員にリアルタイム共有できるスコアボード。">
+  
+  <style>
+:root{color-scheme:dark;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;background:#101a2b;color:#f4f7fc;--bg:#101a2b;--panel:#1b2940;--panel2:#202f49;--line:#344660;--muted:#98abc4;--mint:#69ead0;--gold:#f9cd76;--danger:#ffb0ad}*{box-sizing:border-box}body{margin:0;min-height:100dvh;background:radial-gradient(ellipse at 20% 0%,#223959 0,transparent 39%),#101a2b}button,input,select{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.43}.app-shell{width:min(860px,100%);margin:auto;padding:18px 17px max(40px,env(safe-area-inset-bottom))}.header{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:7px 0 13px}.brand{display:flex;align-items:center;gap:12px}.logo{width:48px;height:48px;display:grid;place-items:center;border:1px solid #5f8191;background:#2a4a56;border-radius:14px;font-size:25px}.eyebrow{font-weight:700;letter-spacing:.19em;color:var(--mint);font-size:9px;margin:0 0 4px}h1{font-size:26px;margin:0;letter-spacing:.08em}h1 span{font-size:11px;font-weight:600;color:#b1c1d5;letter-spacing:.17em}h2{font-size:20px;letter-spacing:.02em;margin:0}.btn{border:1px solid transparent;border-radius:12px;padding:12px 17px;font-weight:700;white-space:nowrap;color:#f4f7fc;background:#2b405e;transition:filter .15s}.btn:active,.tab:active,.preset-row button:active{filter:brightness(1.25)}.small{padding:9px 12px;font-size:13px}.btn.primary{background:var(--mint);color:#102c33}.btn.accent{background:#35536b;border-color:#527589;color:#d9fcf4}.btn.ghost{background:transparent;border-color:#40546e;color:#dce8f8}.btn.danger{background:#9e4052}.btn.wide{width:100%;margin-top:12px}.status-strip{display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:#1a2b42;padding:10px 12px;border:1px solid #354961;border-radius:12px;color:#d4e1f2;font-size:12px;margin-bottom:20px}.dot{width:8px;height:8px;background:#edc46d;border-radius:50%}.dot.live{background:#62e3c5;box-shadow:0 0 10px #62e3c580}.room-chip{border-radius:6px;background:#31495a;padding:4px 7px;color:var(--mint);font-weight:800;letter-spacing:.1em}.text-btn{margin-left:auto;border:none;background:none;color:var(--mint);text-decoration:underline;text-underline-offset:3px;font-weight:700;font-size:12px}.notice{padding:12px;background:#503a2d;border:1px solid #826143;color:#f8dfb3;border-radius:12px;margin-bottom:12px;font-size:13px}.score-top,.action-panel,.history-panel{margin-top:17px}.section-heading{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:13px}.score-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.score-card{position:relative;text-align:left;border:1px solid #405069;background:linear-gradient(145deg,#243653,#1b2b43);border-radius:18px;min-width:0;padding:15px 15px 13px;min-height:147px;color:inherit;overflow:hidden;box-shadow:0 8px 26px #0002}.score-card.leader{border-color:#a59163;background:linear-gradient(135deg,#334454,#23334b)}.score-card.leader:before{position:absolute;inset:0 auto auto 0;content:"";height:3px;width:100%;background:var(--gold)}.player-line{display:flex;align-items:center;gap:6px;font-size:14px;min-width:0}.player-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700}.badge-parent{font-size:10px;background:#f0bc70;color:#352811;border-radius:5px;padding:2px 5px;font-weight:900}.score-card .score{display:block;font-weight:800;font-size:clamp(28px,6vw,42px);font-variant-numeric:tabular-nums;letter-spacing:-.055em;line-height:1.35;white-space:nowrap}.score-card .score small{font-size:12px;letter-spacing:0;margin-left:3px;font-weight:500;color:#bacadd}.delta{color:var(--mint);font-size:12px;font-weight:700}.delta.negative{color:#ffb5b5}.score-rank{position:absolute;right:13px;bottom:11px;color:#8aa0b8;font-size:11px}.muted-help{color:#90a5c0;font-size:11px;margin:10px 1px 0}.round-panel{margin-top:17px;padding:14px 6px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid var(--line);border-radius:14px;background:#16263c}.round-item{display:flex;flex-direction:column;align-items:center;gap:7px;padding:1px 4px;border-right:1px solid #354760;min-width:0}.round-item:last-child{border-right:none}.round-caption{color:var(--muted);font-size:11px}.round-item strong{font-size:16px;white-space:nowrap}.stepper{display:flex;align-items:center;gap:7px}.stepper button{background:#3b526b;border:0;color:#fff;border-radius:7px;min-width:23px;min-height:26px;font-weight:900}.action-panel,.history-panel{background:#19293f;border:1px solid #2f415b;border-radius:18px;padding:16px}.tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:0 0 13px}.tabs::-webkit-scrollbar{display:none}.tab{flex:1;min-width:max-content;border:1px solid #425570;color:#b6c9da;background:#243750;border-radius:9px;font-size:12px;font-weight:700;padding:11px 8px}.tab.active{color:#132c33;background:var(--mint);border-color:var(--mint)}.tab-pane{padding-top:3px}.tab-pane[hidden]{display:none}.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}label{display:block;color:#c6d6e8;font-size:13px;font-weight:700;margin:12px 0 0}label small{display:block;color:var(--muted);font-size:10px;font-weight:500;margin-top:3px}input:not([type="checkbox"]),select{width:100%;height:45px;color:#f8fbff;background:#111f32;border:1px solid #465a73;border-radius:10px;padding:0 12px;margin-top:8px;min-width:0;outline:none}input:focus,select:focus{border-color:var(--mint)}.preset-row{display:flex;gap:6px;margin:10px 0;flex-wrap:wrap}.preset-row button{color:#d2e4f3;border:1px solid #445871;background:#273953;padding:8px 10px;border-radius:8px;font-size:11px;font-weight:700}.calc-preview{color:#abc4d5;border-left:3px solid #4f7b88;padding:9px 10px;background:#20334a;border-radius:0 9px 9px 0;font-size:12px;line-height:1.6;margin:13px 0 3px}.form-instruction{color:#d3e1ee;font-size:13px}.check-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.check-grid label,.check-line{margin:0;padding:11px 12px;border-radius:9px;border:1px solid #3e536d;background:#22364d;display:flex;align-items:center;gap:8px;font-size:12px}.check-line{margin-top:12px}input[type=checkbox]{accent-color:#4dd8c0;width:17px;height:17px}.history-panel{margin-top:18px}.history-list{display:flex;flex-direction:column;gap:0}.history-item{border-top:1px solid #2f415a;padding:12px 1px;display:flex;gap:8px;align-items:flex-start;justify-content:space-between;font-size:13px}.history-item time{color:var(--muted);font-size:11px;white-space:nowrap}.history-empty{color:#8198af;font-size:12px;padding:12px 0}footer{text-align:center;color:#7790aa;font-size:10px;padding:26px 0 0}.modal{max-width:min(480px,calc(100% - 28px));width:100%;max-height:85dvh;overflow:auto;border-radius:18px;border:1px solid #587189;color:#eff6ff;background:#1d2e47;box-shadow:0 24px 80px #0008;padding:0}.modal::backdrop{background:#070f1bc9;backdrop-filter:blur(4px)}.modal-inner{padding:22px}.modal-inner h2{margin-bottom:9px}.modal-inner label{margin:17px 0 0}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}.tiny{font-size:12px;color:#adc0d3;line-height:1.7}.setup-names{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}.share-link{display:flex;align-items:center;gap:6px}.share-link input{font-size:11px}.share-link button{margin-top:8px}.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);width:max-content;max-width:calc(100% - 40px);background:#38715f;color:#f5fffd;border-radius:12px;padding:12px 17px;box-shadow:0 7px 30px #0006;z-index:50;font-size:13px}
+/* スマートフォン縦持ち専用：すべての端末幅で同じ1列レイアウト。 */
+.app-shell{width:100%;max-width:480px;padding:12px 12px calc(102px + env(safe-area-inset-bottom,0px));}
+.header{padding:5px 0 12px}
+.logo{width:43px;height:43px;font-size:22px}
+h1{font-size:24px}
+.status-strip{margin-bottom:15px;padding:9px 10px}
+.section-heading{margin-bottom:10px}
+.score-top{margin-top:14px}
+.score-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.score-card{min-height:128px;padding:12px 10px 21px;border-radius:15px;touch-action:manipulation}
+.score-card .score{font-size:clamp(24px,6.7vw,35px);letter-spacing:-.065em;line-height:1.38}
+.score-card .score-rank{bottom:6px;right:9px}
+.player-line{font-size:13px}
+.delta{font-size:11px}
+.round-panel{padding:12px 3px;margin-top:14px}
+.round-item{gap:6px;padding:1px 2px}
+.round-item strong{font-size:clamp(12px,3.7vw,16px);overflow:hidden;max-width:100%;text-overflow:ellipsis}
+.stepper{gap:5px}
+.stepper button{min-width:32px;min-height:36px;font-size:19px;touch-action:manipulation}
+.action-panel,.history-panel{padding:14px 12px}
+.action-panel{scroll-margin-top:12px}
+.tabs{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:7px;overflow:visible;padding-bottom:12px}
+.tab{grid-column:span 2;min-width:0;padding:12px 3px;min-height:46px;font-size:13px;touch-action:manipulation}
+.tab:nth-child(4),.tab:nth-child(5){grid-column:span 3}
+.btn:not(.small){min-height:46px}
+.btn.primary.wide{min-height:52px;font-size:16px}
+.preset-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.preset-row button{min-height:43px;font-size:13px;padding:7px 3px;touch-action:manipulation}
+input:not([type="checkbox"]),select{font-size:16px;min-height:48px}
+label{font-size:13px}
+.two-col{gap:8px}
+.modal{max-width:calc(100% - 22px);max-height:calc(100dvh - 32px);border-radius:18px}
+.modal-inner{padding:19px 16px 24px}
+.modal-actions .btn{white-space:normal}
+.quick-dock{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:20;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:9px 12px calc(9px + env(safe-area-inset-bottom,0px));background:linear-gradient(180deg,#172841f5,#0e1a2beb);border-top:1px solid #3a5369;box-shadow:0 -5px 30px #0006;backdrop-filter:blur(14px)}
+.dock-btn{border:1px solid transparent;background:transparent;color:#adc2d5;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:55px;font-size:12px;font-weight:800;touch-action:manipulation}
+.dock-btn.active{color:#73f1d5;border-color:#3b857c;background:#214b51}
+.dock-symbol{font-size:21px;font-weight:900;line-height:1.12}
+.toast{bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:30}
+@media(max-width:350px){.app-shell{padding-left:9px;padding-right:9px}.score-card{padding:10px 8px 21px}.score-card .score{font-size:clamp(22px,7.1vw,25px)}.player-line{font-size:12px}.tab{font-size:12px}.two-col{gap:6px}.stepper button{min-width:29px}.round-item strong{font-size:12px}}
+@media(orientation:landscape) and (max-height:500px){.quick-dock{padding-top:4px;padding-bottom:4px}.dock-btn{min-height:40px;flex-direction:row}.dock-symbol{font-size:16px}.app-shell{padding-bottom:74px}}
+
+/* 共有時の接続状態と誤入力防止 */
+.sync-help{font-size:12px;line-height:1.55;color:#d3f8ee;background:#1c434a;border:1px solid #3b777b;padding:10px 12px;border-radius:11px;margin:12px 0 3px}
+.score-card:disabled{opacity:.68;filter:saturate(.75)}
+.dot:not(.live){background:#f5b96b}
+
+/* いつものメンバー：スマホで押しやすい6人分の選択ボタン */
+.roster-section{margin-top:17px}
+.roster-header{display:flex;align-items:center;justify-content:space-between;color:#e8f8f6;font-size:14px}
+.roster-header span{font-size:12px;font-weight:800;color:var(--mint)}
+.roster-choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
+.roster-chip{min-height:46px;min-width:0;border:1px solid #587089;border-radius:11px;background:#263c55;color:#c4d6e4;font-size:14px;font-weight:800;touch-action:manipulation}
+.roster-chip.chosen{background:#25514e;color:#80efd9;border-color:#62d5bd}
+.roster-chip:active{filter:brightness(1.2)}
+.roster-help{margin:9px 1px 0;font-size:11px}
+.setup-names label{margin-top:13px;font-size:12px}
+@media(max-width:350px){.roster-choices{gap:6px}.roster-chip{font-size:13px}}
+
+/* v6: 閲覧中心のスコアカード、明示的な修正ボタン */
+.score-card{min-height:150px;padding-bottom:46px;cursor:default}
+.score-card.leader:before{pointer-events:none}
+.score-rank{right:auto;left:11px;bottom:13px;font-weight:700;font-size:11px;color:#d1e2f0}
+.score-edit{position:absolute;right:8px;bottom:8px;min-height:35px;padding:6px 11px;border:1px solid #617a90;border-radius:9px;color:#cce6ed;background:#344b62;font-size:12px;font-weight:800;touch-action:manipulation}
+.score-edit:disabled{opacity:.4}
+.leader-difference{color:#c0d4e4;font-size:11px;margin-top:4px;display:block}
+.score-method{display:grid;grid-template-columns:1fr 1fr;gap:5px;background:#14243a;border:1px solid #41556e;padding:5px;border-radius:12px;margin:15px 0 10px}
+.method-btn{border:0;background:transparent;color:#afc4db;min-height:42px;border-radius:9px;font-size:13px;font-weight:800;touch-action:manipulation}
+.method-btn.active{background:#35786f;color:white}
+.auto-fields{margin-bottom:3px}
+.auto-result{color:#a5f2dc;font-size:13px;line-height:1.6;font-weight:700;margin:11px 2px;padding:8px 10px;border-radius:9px;background:#1c403f}
+.auto-result.invalid{background:#513438;color:#ffd7d5}
+[hidden]{display:none!important}
+.edit-method{margin-top:18px}
+.stick-rows{display:grid;gap:8px;margin:10px 0}
+.stick-row{display:grid;grid-template-columns:1fr 40px minmax(50px,70px) 40px;gap:7px;align-items:center;min-width:0;border:1px solid #3b5872;padding:8px;border-radius:11px;background:#213750}
+.stick-denom{font-weight:800;font-size:15px;color:#edf8fc}
+.stick-subtotal{font-size:10px;color:#9ddccc;display:block;margin-top:2px}
+.stick-step{width:40px;min-height:43px;border:1px solid #52738a;border-radius:10px;background:#324d66;color:white;font-size:24px;font-weight:700;touch-action:manipulation}
+.stick-row input.stick-count{width:100%;height:43px;min-height:43px;margin:0;padding:0 3px;text-align:center;font-size:18px;font-weight:800}
+.stick-summary{display:grid;grid-template-columns:1fr auto;gap:5px;padding:13px 10px;background:#163d40;border:1px solid #3f8881;border-radius:10px;margin:12px 0}
+.stick-summary strong{font-size:22px;color:#77f0d5;white-space:nowrap}
+.stick-summary small{grid-column:1/-1;color:#c1d7e5;font-size:12px}
+.edit-warning{color:#f0c9b1;font-size:12px;line-height:1.6;margin-top:12px}
+@media(max-width:350px){.score-card{min-height:150px;padding-bottom:47px}.score-rank{left:8px;font-size:10px}.score-edit{padding:5px 8px;min-height:34px}.stick-row{grid-template-columns:1fr 37px minmax(43px,55px) 37px;gap:5px}.stick-step{width:37px}}
+
+/* v7: 自動卓風パネル。保存データはv6と共通、視点だけ各端末で保持する。 */
+:root{--led:#ff5d3d;--neon:#69edc6}
+body{background:radial-gradient(circle at 50% -5%,#174638 0,transparent 43%),#081b1b}
+.app-shell{max-width:480px}
+.display-controls{display:flex;gap:10px;align-items:end;justify-content:space-between;margin:10px 0 0}
+.viewer-field{margin:0;flex:1;min-width:0;font-size:11px;color:#b9d4ce}
+.viewer-field span{display:block;margin-bottom:4px}
+.viewer-field select{margin:0;min-height:42px;height:42px;border-color:#476759;background:#0b2423;color:#e9fff7;font-weight:800;padding:0 28px 0 10px}
+.view-buttons{display:flex;flex:0 0 auto;gap:3px;padding:3px;border-radius:10px;background:#153332;border:1px solid #315c4e}
+.view-btn{color:#b0cebf;padding:9px 8px;border:0;border-radius:8px;background:transparent;min-height:35px;font-size:12px;font-weight:700;white-space:nowrap}
+.view-btn.active{background:#7de1bf;color:#082923}
+.viewer-help{font-size:11px;color:#c0d5cb;margin:9px 1px 12px;line-height:1.5}
+.mahjong-table[hidden],.score-grid[hidden]{display:none !important}
+.mahjong-table{margin-top:6px}
+.table-bezel{position:relative;border:3px solid #829b91;border-bottom-color:#3f625a;border-right-color:#3e5d52;border-radius:24px;padding:9px;background:linear-gradient(135deg,#d0d9d3 0,#536c67 9%,#142e2c 18%,#74887f 95%,#233d39 100%);box-shadow:0 12px 26px #0007,inset 0 0 4px #fff9;}
+.table-glass{border:1px solid #31594f;border-radius:15px;padding:10px 7px;background:radial-gradient(ellipse at center,#102c22 0,#050e10 64%,#02090a 100%);box-shadow:inset 0 7px 22px #000c,inset 0 0 0 1px #94bda222;display:grid;gap:8px}
+.table-middle{display:grid;grid-template-columns:minmax(0,1fr) minmax(108px,1.19fr) minmax(0,1fr);gap:7px;min-height:178px}
+.table-seat{position:relative;min-width:0;border:1px solid #285345;border-radius:9px;padding:8px 9px;color:#d7eee1;background:linear-gradient(150deg,#061a19 0%,#091e19 72%,#09211c 100%);box-shadow:inset 0 1px 0 #7ed9b91d;display:flex;flex-direction:column;justify-content:center;gap:4px;overflow:hidden}
+.table-seat.is-leader{border-color:#a08748;box-shadow:inset 0 0 0 1px #ccaf4833,0 0 10px #e7cb5030}
+.table-seat.is-me{border-color:#54bda1}
+.table-seat.is-riichi{background:linear-gradient(150deg,#261515 0%,#0e1d19 90%);border-color:#c45f4c}
+.seat-heading{display:flex;align-items:center;justify-content:space-between;gap:3px;min-width:0}
+.seat-position{color:#80ddac;font-size:10px;font-weight:900;letter-spacing:.08em;white-space:nowrap}
+.seat-rank{font-size:10px;color:#ffe0a1;white-space:nowrap}
+.seat-name{color:#ecfff2;font-size:14px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.seat-points{font-family:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;font-weight:900;font-size:clamp(25px,7vw,33px);line-height:1.13;color:var(--led);letter-spacing:-.06em;text-shadow:0 0 7px #e74430bb,0 0 19px #ab2d2852;font-variant-numeric:tabular-nums;white-space:nowrap}
+.seat-detail{font-size:10px;color:#b2c9b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.seat-tools{display:flex;align-items:center;justify-content:space-between;gap:4px;min-width:0}
+.seat-tags{display:flex;gap:3px;min-width:0;flex-wrap:wrap}
+.seat-tag{font-size:9px;background:#334d29;color:#ffe2a2;border:1px solid #78663e;border-radius:4px;padding:1px 4px;font-weight:800}
+.seat-tag.riichi-tag{color:#ffc0af;border-color:#93443b;background:#44251c}
+.seat-edit{color:#b8ecd9;font-size:10px;min-width:31px;min-height:28px;padding:1px 5px;border:1px solid #335b4f;background:#15342a;border-radius:6px}
+.seat-top,.seat-bottom{min-height:90px;padding:9px 15px}
+.seat-top .seat-points,.seat-bottom .seat-points{font-size:clamp(30px,8vw,38px)}
+.seat-left,.seat-right{padding:8px 5px;justify-content:space-around}
+.seat-left .seat-heading,.seat-right .seat-heading{flex-wrap:wrap}
+.seat-left .seat-name,.seat-right .seat-name{font-size:13px}
+.seat-left .seat-points,.seat-right .seat-points{font-size:clamp(17px,4.4vw,23px);letter-spacing:-.07em}
+.seat-left .seat-detail,.seat-right .seat-detail{font-size:9px;white-space:normal;line-height:1.25;overflow-wrap:anywhere}
+.seat-left .seat-tools,.seat-right .seat-tools{align-items:flex-end}
+.table-center{min-width:0;padding:10px 4px;display:flex;flex-direction:column;gap:3px;align-items:center;justify-content:center;color:#d8f0de;border-radius:9px;background:radial-gradient(ellipse at center,#153c32 0%,#081b1b 78%);border:1px solid #2b5445;box-shadow:inset 0 0 14px #0008;text-align:center}
+.table-center-caption{font-size:9px;font-weight:900;letter-spacing:.13em;color:#85c6ae}
+.table-center-hand{font-size:clamp(18px,5vw,23px);font-weight:900;white-space:nowrap;color:#edffdc}
+.table-center-divider{height:1px;background:#3e6652;width:75%;margin:5px}
+.table-round-meta{display:flex;justify-content:space-between;gap:6px;width:80%;font-size:11px;color:#9dd0b1}
+.table-round-meta strong{color:#fff0bc;font-size:15px;font-family:ui-monospace,monospace}
+.table-dealer-tag{margin-top:5px;font-size:10px;color:#f8e19a;border:1px solid #72673d;border-radius:6px;padding:3px 4px;max-width:95%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.table-center-stick{display:flex;gap:4px;align-items:center;justify-content:center;padding-top:7px}
+.table-center-stick i{display:block;width:21px;height:6px;background:#f1dfbd;border:1px solid #b79f76;border-radius:2px}
+.table-center-stick i:nth-child(2){background:#c85343;border-color:#943c32}
+.table-legend{display:flex;justify-content:space-between;gap:5px;color:#aac4b4;font-size:10px;padding:9px 3px 0}
+.legend-red{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--led);box-shadow:0 0 6px var(--led)}
+.round-settings{margin-top:12px;background:#102828;border:1px solid #2c5245;border-radius:12px;overflow:hidden}
+.round-settings>summary{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;color:#b9d9c5;font-size:12px;font-weight:700;cursor:pointer;list-style:none}
+.round-settings>summary::-webkit-details-marker{display:none}
+.round-settings[open]>summary span{transform:rotate(180deg)}
+.round-settings .round-panel{margin:0;border:0;border-top:1px solid #294738;border-radius:0}
+@media(max-width:355px){.table-glass{padding:8px 5px}.table-bezel{padding:7px}.table-middle{grid-template-columns:minmax(0,1fr) minmax(96px,1.1fr) minmax(0,1fr);gap:5px}.table-seat{padding:7px 5px}.seat-top,.seat-bottom{padding:9px 10px}.seat-left .seat-points,.seat-right .seat-points{font-size:16px}.seat-left .seat-name,.seat-right .seat-name{font-size:11px}.seat-detail{font-size:9px}.table-center-hand{font-size:18px}.table-round-meta{width:90%}.view-btn{padding:8px 6px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
+/* 上下席は横組みにして、縦画面でも卓全体を見渡せる高さに収める */
+.seat-top,.seat-bottom{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:17px 40px 25px;align-items:center;column-gap:7px;row-gap:1px;min-height:0;padding:6px 10px}
+.seat-top .seat-heading,.seat-bottom .seat-heading{grid-column:1/-1;grid-row:1}
+.seat-top .seat-name,.seat-bottom .seat-name{grid-column:1;grid-row:2;font-size:15px}
+.seat-top .seat-points,.seat-bottom .seat-points{grid-column:2;grid-row:2;font-size:clamp(25px,7.7vw,35px)}
+.seat-top .seat-detail,.seat-bottom .seat-detail{grid-column:1;grid-row:3}
+.seat-top .seat-tools,.seat-bottom .seat-tools{grid-column:2;grid-row:3;gap:6px}
+.seat-top .seat-edit,.seat-bottom .seat-edit{min-height:25px}
+@media(max-height:900px){.table-legend{display:none}}
+
+/* v7.1: 参加者選択の入口を常時見える位置にし、各自の席をワンタップ選択 */
+.participants-bar{padding:11px 12px;border-radius:14px;border:1px solid #3b7566;background:linear-gradient(130deg,#123930,#102924);margin:8px 0 16px}
+.participants-bar-heading{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.participants-bar-heading>div{min-width:0;flex:1}
+.participants-label{font-size:11px;font-weight:800;color:#9bd8c8}
+.participants-summary{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px}
+.participant-pill{font-size:12px;font-weight:800;background:#274e44;border:1px solid #4c8574;color:#f1fff9;padding:5px 7px;border-radius:7px}
+.participants-change{font-size:12px;min-height:49px;line-height:1.35;padding:8px 11px;max-width:143px;white-space:normal}
+.viewer-choices{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:9px 0 4px}
+.viewer-chip{border:1px solid #42735f;background:#13342c;color:#d6eede;border-radius:9px;padding:8px 3px;min-width:0;min-height:44px;font-size:13px;font-weight:800;touch-action:manipulation}
+.viewer-chip.selected{border-color:#a7f2c5;color:#0d2c20;background:#99ebc3}
+.viewer-help.needs-selection{font-size:12px;font-weight:750;color:#f6de9a}
+.roster-chip.pending{background:#946333;color:#fff8cd;border-color:#fed17a}
+.roster-replace{margin-top:12px;padding:11px;border-radius:12px;background:#42352d;border:1px solid #ac824c}
+.roster-replace p{font-size:13px;line-height:1.5;color:#ffedcc;font-weight:750;margin:0 0 10px}
+.roster-replace-targets{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.replace-target{border:1px solid #cfb47a;border-radius:10px;background:#644a31;color:#fff8e8;font-size:13px;font-weight:750;min-height:46px;touch-action:manipulation}
+.roster-replace .text-btn{margin-top:8px;color:#f8e0b2}
+@media(max-width:355px){.participants-change{font-size:11px;max-width:126px;padding:6px 8px}.participant-pill{font-size:11px;padding:4px 6px}.viewer-choices{gap:4px}.viewer-chip{font-size:12px}}
+
+/* v7.3: 30,000点開始／35,000点目標・明確な座順指定 */
+.game-rules{display:flex;align-items:center;gap:7px;flex-wrap:wrap;padding:9px 10px;margin:0 0 12px;background:#152f2a;border:1px solid #416958;border-radius:10px;color:#bde2d2;font-size:11px;font-weight:700}
+.game-rules strong{font-size:14px;color:#f3fdeb;font-variant-numeric:tabular-nums}
+.game-rules .game-goal{color:#f7d995}
+.game-seats-button{margin-left:auto;padding:8px 9px;min-height:38px;border:1px solid #7ea594;border-radius:8px;background:#31584b;color:#effff4;font-size:11px;font-weight:900}
+.goal-tag{background:#3a4624;border-color:#a9a451;color:#f5f5a7;font-size:8px}
+.goal-difference{display:block;color:#f9d68f;font-size:11px;margin-top:3px}
+.seat-assignment{padding:13px 12px;margin:16px 0 11px;border-radius:14px;border:1px solid #719c73;background:linear-gradient(125deg,#13382e,#14302a)}
+.seat-assignment-title{display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:15px}
+.seat-explain{margin:8px 0 12px}
+.seat-assignments{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.seat-assign-row{display:flex;flex-direction:column;margin:0;padding:9px;border:1px solid #446e5b;border-radius:10px;background:#102a23;gap:3px}
+.seat-wind{font-size:12px;color:#b8e3c8;font-weight:900}
+.seat-wind.dealer{color:#fbe3a1}
+.seat-assign-row select{margin:0;background:#1e4033;border:1px solid #60977c;color:#f5fff6;min-height:44px;height:44px;font-size:14px;font-weight:800}
+.seat-order-summary{font-size:11px;line-height:1.7;color:#f0daaf;margin:11px 0 0}
+.setup-name-details{margin:10px 0;padding:11px;border:1px solid #40516b;border-radius:9px}
+.setup-name-details>summary{cursor:pointer;color:#c3d4e5;font-size:12px;font-weight:750}
+@media(max-width:355px){.seat-assignment{padding:10px 9px}.seat-assignments{gap:6px}.seat-assign-row{padding:6px}.seat-assignment-title{font-size:13px}.game-rules{gap:6px;font-size:10px}.game-seats-button{font-size:10px}}
+/* v7.4: 視覚的に35,000点を「超えた」ときだけ緑LEDへ切り替える */
+.table-seat.goal-exceeded .seat-points{color:#67f5b2;text-shadow:0 0 8px #44eeb6b2,0 0 19px #39d6a966}
+.score-card.goal-exceeded .score{color:#67f5b2;text-shadow:0 0 9px #44eeb63d}
+.legend-green{display:inline-block;width:6px;height:6px;border-radius:50%;background:#67f5b2;box-shadow:0 0 7px #67f5b2}
+.seat-assigned-name{color:#f6fff8;font-size:16px;min-height:22px;overflow-wrap:anywhere}
+.seat-assignment .seat-assign-row{cursor:default}
+
+/* v7.6: オフライン利用に関する補助操作は「その他」に収納 */
+.offline-options{margin-top:14px;border:1px solid #3d6a5f;border-radius:12px;background:#14342d;padding:12px}
+.offline-options h3{font-size:14px;margin:0 0 7px;color:#bbf4e0}
+.offline-options .tiny{margin:7px 0}
+.backup-buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.backup-buttons .btn{padding:10px 5px;min-height:45px;font-size:12px;white-space:normal}
+/* v7.5: 卓だけで通常の点数記録。入力フォームはダイアログに収納。 */
+.app-shell{padding:6px 10px calc(12px + env(safe-area-inset-bottom,0px));max-width:480px}
+.header{padding:2px 1px 7px}.brand{gap:7px}.logo{width:34px;height:34px;border-radius:10px;font-size:19px}
+h1{font-size:21px}h1 span{font-size:9px}.header .small{padding:8px 9px;font-size:12px;min-height:38px}
+.status-strip{margin-bottom:6px;padding:6px 9px;font-size:11px;min-height:31px}
+.score-top{margin-top:3px}.score-top>.section-heading{margin-bottom:5px}.score-top h2{font-size:15px}.score-top .eyebrow{display:none}
+.score-top #undoButton{font-size:11px;padding:5px 8px;min-height:35px}
+.game-rules{margin:0 0 5px;padding:5px 7px;gap:5px;justify-content:space-between}
+.game-rules strong{font-size:12px}.game-seats-button{min-height:34px;padding:5px 6px;font-size:10px}
+.display-controls{margin:2px 0 6px}.viewer-field{font-size:11px;display:flex;align-items:center;gap:8px}
+.viewer-field span{margin:0;white-space:nowrap}.viewer-field select{flex:1;min-width:0;min-height:37px;height:37px}
+.participants-bar[hidden],#viewerChoices[hidden],#viewerHelp[hidden],.view-buttons[hidden]{display:none!important}
+.table-bezel{border-radius:16px;padding:6px;border-width:2px}.table-glass{padding:7px 6px;gap:5px;border-radius:10px}
+.table-middle{min-height:152px;grid-template-columns:minmax(0,1fr) minmax(99px,1.12fr) minmax(0,1fr);gap:5px}
+.table-seat{gap:3px;padding:6px;border-radius:8px}.seat-top,.seat-bottom{grid-template-rows:15px 33px 24px;padding:4px 9px;min-height:0}
+.seat-top .seat-points,.seat-bottom .seat-points{font-size:clamp(23px,7vw,33px)}
+.seat-name{font-size:13px}.seat-top .seat-name,.seat-bottom .seat-name{font-size:14px}
+.seat-left,.seat-right{padding:5px 4px}.seat-left .seat-points,.seat-right .seat-points{font-size:clamp(15px,4.1vw,21px)}
+.seat-left .seat-name,.seat-right .seat-name{font-size:11px}
+.seat-left .seat-detail,.seat-right .seat-detail{font-size:9px}.table-center{padding:6px 1px}
+.table-center-hand{font-size:19px}.table-center-divider{margin:2px}.table-center-stick{padding-top:3px}
+.quick-dock{position:static;transform:none;max-width:none;width:100%;margin-top:9px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;padding:0;background:none;border:0;box-shadow:none;backdrop-filter:none}
+.dock-btn{min-height:55px;gap:2px;background:#174137;border:1px solid #397f64;color:#e5fff0;font-size:11px;border-radius:9px}
+.dock-btn:active{background:#26775e}.dock-symbol{font-size:17px}
+.toast{bottom:calc(18px + env(safe-area-inset-bottom,0px))}
+.action-dialog .modal-inner{padding:15px 13px 16px}.action-dialog .action-panel{margin:0;padding:0;border:0;background:transparent}
+.action-dialog .section-heading{margin-bottom:7px}.action-dialog .tabs{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding-bottom:5px}
+.action-dialog .tab{grid-column:auto!important;min-height:40px;font-size:11px;padding:6px 1px;white-space:normal}
+.action-dialog .modal-actions{margin-top:10px}
+.extras-dialog .round-settings{margin-top:10px}.extras-dialog .history-panel{margin-top:12px;padding:10px}
+.extras-dialog .history-list{max-height:22dvh;overflow:auto}
+.seat-hint{font-size:11px;color:#bbd4c5}.seat-assign-row{gap:6px}.seat-assign-row select{margin:0!important}
+@media(max-width:355px){.app-shell{padding-left:6px;padding-right:6px}.table-glass{padding:5px 4px}.table-bezel{padding:5px}.table-middle{grid-template-columns:minmax(0,1fr) minmax(88px,1.16fr) minmax(0,1fr);gap:4px}.seat-top,.seat-bottom{padding-left:5px;padding-right:5px}.seat-left,.seat-right{padding:4px 2px}.table-center-hand{font-size:16px}.dock-btn{font-size:10px}.game-rules{font-size:10px}}
+@media(max-height:720px){.header{padding-bottom:4px}.table-middle{min-height:135px}.seat-top,.seat-bottom{grid-template-rows:14px 30px 22px}.seat-left .seat-detail,.seat-right .seat-detail{font-size:8px}.quick-dock{margin-top:6px}.dock-btn{min-height:47px}}
+
+/* v7.7: 不整合警告は卓の上で常に確認できる。通常時は余白を取らない */
+.balance-alert{border:1px solid #ffb5a0;border-radius:8px;background:#642d2c;color:#fff0e6;font-size:11px;font-weight:800;padding:8px 9px;line-height:1.45;margin:0 0 5px}
+.balance-alert[hidden],.update-banner[hidden]{display:none!important}
+.update-banner{padding:8px 9px;margin:4px 0;border:1px solid #d0b56d;border-radius:8px;background:#503c1b;color:#ffecb0;font-size:12px}
+.update-banner button{color:#112f21;border:0;border-radius:7px;background:#f1dd93;margin-left:9px;padding:5px 10px;font-weight:bold}
+.field-inactive{opacity:.55}
+.field-inactive input:disabled{opacity:.5}
+/* 通常の卓画面を小型端末でスクロールさせない。操作ダイアログ内はスクロールを許容。 */
+@media(max-height:730px){
+  .app-shell{padding-top:2px;padding-bottom:2px}
+  .header{padding:0 1px 3px}.logo{width:27px;height:27px;font-size:15px}h1{font-size:17px}h1 span{font-size:8px}
+  .header .small{padding:4px 7px;min-height:29px}
+  .status-strip{padding:4px 6px;margin-bottom:3px;min-height:25px;font-size:10px}
+  .score-top .section-heading{margin-bottom:2px}.score-top h2{font-size:13px}
+  .score-top #undoButton{min-height:27px;padding:3px 6px}
+  .game-rules{padding:3px 6px;margin-bottom:2px;font-size:9px}
+  .game-rules strong{font-size:11px}.game-seats-button{min-height:28px;padding:4px 5px}
+  .display-controls{margin:0 0 3px}.viewer-field{gap:5px;font-size:10px}
+  .viewer-field select{height:31px;min-height:31px;margin-top:0;padding:0 7px;font-size:12px}
+  .table-bezel{padding:4px}.table-glass{padding:4px 5px;gap:3px}
+  .table-middle{min-height:108px;gap:4px}
+  .seat-top,.seat-bottom{grid-template-rows:12px 25px 18px;padding:2px 6px}
+  .seat-top .seat-points,.seat-bottom .seat-points{font-size:clamp(19px,6.5vw,29px)}
+  .seat-name,.seat-top .seat-name,.seat-bottom .seat-name{font-size:12px}
+  .seat-left,.seat-right{padding:2px 3px}
+  .seat-left .seat-points,.seat-right .seat-points{font-size:clamp(14px,4vw,19px)}
+  .seat-left .seat-name,.seat-right .seat-name{font-size:10px}
+  .seat-tools{gap:1px}.seat-edit{min-height:23px}
+  .table-center{padding:3px 1px}.table-center-hand{font-size:clamp(14px,4.8vw,20px)}
+  .table-center-stick{padding-top:0}.table-center-stick i{height:4px}
+  .table-round-meta{font-size:9px}.table-round-meta strong{font-size:12px}
+  .table-dealer-tag{margin-top:1px;padding:2px;font-size:9px}
+  .quick-dock{margin-top:4px;gap:4px}.dock-btn{min-height:40px;font-size:10px}.dock-symbol{font-size:14px}
+}
+@media(max-height:590px){
+  .table-middle{min-height:96px}.table-glass{gap:2px}.seat-top,.seat-bottom{grid-template-rows:11px 23px 16px}
+  .table-center-stick{display:none}.seat-detail{font-size:9px}
+  .quick-dock{margin-top:3px}.dock-btn{min-height:37px}
+}
+
+/* v8.0: 焼き鳥アイコンをオレンジのプレート＋串焼き線画に変更。順位差機能は維持 */
+.score-heading-actions{display:flex;align-items:center;gap:5px}
+.score-heading-actions .btn{min-width:0}
+.gap-button{border:1px solid #528f7a;background:#235449;color:#dcffed;font-weight:850;min-height:35px;padding:5px 9px}
+.rank-gap-list{display:flex;flex-direction:column;gap:7px;margin-top:14px}
+.rank-gap-row{display:grid;grid-template-columns:42px minmax(0,1fr) auto;gap:8px;align-items:center;border:1px solid #385c59;border-radius:10px;padding:11px 10px;background:#102b2b;min-height:61px}
+.rank-gap-row.my-rank-gap{border-color:#90d6ba;background:#214c40}
+.rank-gap-position{font-size:12px;color:#eacb7d;font-weight:900}
+.rank-gap-player{display:flex;flex-direction:column;gap:3px;min-width:0}
+.rank-gap-player strong{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px}
+.rank-gap-player small{font-size:11px;color:#b4cbbf}
+.rank-gap-value{font-size:14px;color:#e9f8f0;font-variant-numeric:tabular-nums;white-space:nowrap}
+.rank-gap-value.positive{color:#80f8bf}.rank-gap-value.negative{color:#ffb09f}
+@media(max-height:730px){.gap-button{min-height:27px;padding:3px 7px;font-size:10px}}
+@media(max-width:355px){.score-heading-actions{gap:3px}.gap-button{padding:4px 5px;font-size:10px}.rank-gap-row{padding:9px 7px;gap:5px}.rank-gap-value{font-size:12px}}
+
+/* v8.0: 名前の横に付ける小型の焼き鳥プレート。オレンジ札に串焼きの線画を載せる。 */
+.seat-name{display:flex;align-items:center;gap:5px;min-width:0}
+.seat-name-text{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.player-name{display:inline-flex;align-items:center;gap:5px;min-width:0}
+.player-name-text{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.yakitori-fuda{
+  position:relative;box-sizing:border-box;display:inline-flex;flex:0 0 auto;
+  align-items:center;justify-content:center;width:18px;height:18px;
+  margin:0;padding:0;vertical-align:middle;border-radius:4px;
+  background:linear-gradient(145deg,#f4a22c 0%,#e57c18 62%,#bf5c0f 100%);
+  border:1px solid #f4c164;
+  box-shadow:0 1px 2px #0009,inset 0 0 0 1px #a54b10,0 0 5px #f2a33530;
+  overflow:hidden;
+}
+.yakitori-fuda::before{
+  content:"";position:absolute;inset:1px;border-radius:3px;
+  background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2024%2024%22%3E%0A%3Crect%20x%3D%221%22%20y%3D%221%22%20width%3D%2222%22%20height%3D%2222%22%20rx%3D%223%22%20fill%3D%22%23ef8d1e%22%20stroke%3D%22%23cf6e00%22%20stroke-width%3D%221.2%22/%3E%0A%3Cpath%20d%3D%22M5%205.8l14%2012.4%22%20stroke%3D%22%231d140d%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22round%22/%3E%0A%3Cpath%20d%3D%22M18.2%2017.2l1.6%201.4-.9.8-1.8-1.1%22%20fill%3D%22none%22%20stroke%3D%22%231d140d%22%20stroke-width%3D%221.4%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%0A%3Cpath%20d%3D%22M7.6%207.8c.8-.8%202.2-.9%203-.1.8.8.7%202-.3%202.8-.9.8-2.3.9-3%20.1-.8-.8-.7-2%20.3-2.8z%22%20fill%3D%22none%22%20stroke%3D%22%231d140d%22%20stroke-width%3D%221.4%22%20stroke-linejoin%3D%22round%22/%3E%0A%3Cpath%20d%3D%22M11.3%2011.1c1-1%202.8-1.1%203.9-.1%201%20.9%201%202.5-.2%203.4-1.2%201-3%201.1-3.9.2-1-.9-.9-2.5.2-3.5z%22%20fill%3D%22none%22%20stroke%3D%22%231d140d%22%20stroke-width%3D%221.4%22%20stroke-linejoin%3D%22round%22/%3E%0A%3Cpath%20d%3D%22M7.8%207.4L6.8%206.3%22%20stroke%3D%22%231d140d%22%20stroke-width%3D%221.4%22%20stroke-linecap%3D%22round%22/%3E%0A%3Cpath%20d%3D%22M9.5%2014.3l-.8%201.4%22%20stroke%3D%22%231d140d%22%20stroke-width%3D%221.3%22%20stroke-linecap%3D%22round%22/%3E%0A%3Cpath%20d%3D%22M13%209.5l.6-1.5%22%20stroke%3D%22%231d140d%22%20stroke-width%3D%221.3%22%20stroke-linecap%3D%22round%22/%3E%0A%3Cpath%20d%3D%22M14.9%2015.4l.9%201.2%22%20stroke%3D%22%231d140d%22%20stroke-width%3D%221.3%22%20stroke-linecap%3D%22round%22/%3E%0A%3C/svg%3E");background-repeat:no-repeat;background-position:center;background-size:100% 100%;
+  filter:drop-shadow(0 1px 0 rgba(255,255,255,.08));
+}
+@media(max-width:355px){.seat-name{gap:3px}.yakitori-fuda{width:16px;height:16px}}
+
+/* v8.1：卓タップと対局結果 */
+.rank-gap-reverse{color:#f9cd76!important;font-weight:700;line-height:1.4;margin-top:3px}
+.game-completion{border:1px solid #42685b;background:#17332f;border-radius:12px;padding:12px;margin:12px 0}
+.game-completion h3{font-size:14px;margin:0 0 5px;color:#bff7dc}
+.results-list{display:grid;gap:8px;margin-top:12px}
+.result-row{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:8px;align-items:center;border:1px solid #466b60;background:#102b2c;border-radius:10px;padding:11px 8px}
+.result-rank{font-size:15px;color:#f7ca75;font-weight:900;text-align:center}
+.result-person{display:grid;gap:3px;min-width:0}
+.result-person strong{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.result-person small{font-size:11px;color:#d6a27e}
+.result-points{text-align:right;font-size:16px;font-weight:900;white-space:nowrap}
+.result-points small{display:block;font-weight:600;font-size:10px;color:#c5d8cd}
+.finished-banner,.shared-action-banner{background:#1f3c33;border:1px solid #6fc9a0;padding:7px 10px;border-radius:10px;color:#d9fff1;font-size:12px;margin-bottom:6px}
+.finished-banner{display:flex;justify-content:space-between;align-items:center;gap:6px}
+.finished-banner[hidden],.shared-action-banner[hidden]{display:none!important}
+.finished-banner button,.shared-action-banner button{color:#d6ffd9;border:1px solid #82d9af;background:#2c5a4b;border-radius:6px;padding:5px 7px;cursor:pointer}
+.shared-action-banner{display:flex;justify-content:space-between;gap:6px;align-items:center}
+#finishGameButton{background:#edb96c;color:#273326}
+@media(max-width:355px){.result-row{padding:7px 5px}.result-points{font-size:13px}}
+
+
+/* 上下の幅を奪わず、左右の持ち点の数字を優先。 */
+.seat-left .seat-points,.seat-right .seat-points{font-size:clamp(18px,5vw,25px);letter-spacing:-.09em;font-variant-numeric:tabular-nums;white-space:nowrap}
+@media(max-width:355px){.seat-left .seat-points,.seat-right .seat-points{font-size:18px}}
+@media(max-height:730px){.seat-left .seat-points,.seat-right .seat-points{font-size:clamp(18px,5vw,22px)}}
+@media(max-height:590px){.seat-left .seat-points,.seat-right .seat-points{font-size:17px}}
+.save-error{background:#662a2f;border:1px solid #ffb2a3;border-radius:9px;padding:7px 10px;font-size:11px;line-height:1.45;color:#fff4eb;display:flex;gap:6px;align-items:center;justify-content:space-between}
+.save-error[hidden]{display:none!important}
+.save-error button{background:#ffdbad;color:#402118;border:none;border-radius:5px;padding:5px 8px;font-weight:800;white-space:nowrap}
+.archived-item{border:1px solid #456c63;border-radius:10px;background:#102e2e;padding:12px 10px;margin-bottom:9px}
+.archived-item strong{display:block;margin-bottom:5px;color:#fff2c8;font-size:13px}
+.archived-item p{font-size:11px;line-height:1.55;color:#d3e7dc;margin:3px 0;white-space:normal}
+.archived-empty{color:#bdd5c9;font-size:13px}
+.toast{white-space:pre-line;line-height:1.45;max-width:min(94vw,460px)}
+/* v8.3: 卓の名前は表示専用。入力と修正は誤タップしにくい別の位置へ集約。 */
+.quick-edit-panel{margin-top:12px;padding:12px;border:1px solid #456c63;border-radius:12px;background:#122f2d}
+.quick-edit-panel h3{font-size:14px;margin:0;color:#dff5e7}
+.quick-edit-controls{display:flex;align-items:end;gap:10px}
+.quick-edit-controls label{flex:1;min-width:0;margin:6px 0 0}
+.quick-edit-controls select{height:40px;margin-top:5px}
+.quick-edit-controls .btn{min-height:40px;padding:8px 11px;font-size:12px}
+.quick-edit-panel .tiny{margin:8px 0 0;font-size:11px}
+
+
+/* v8.5: 左右席も対面と同じ角度の横向きパネルで統一 */
+.table-middle{align-items:stretch}
+.table-seat.seat-left,.table-seat.seat-right{display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+.table-seat.seat-left .seat-heading,.table-seat.seat-right .seat-heading{display:flex;justify-content:space-between;align-items:center;gap:4px;flex-wrap:nowrap}
+.table-seat.seat-left .seat-name,.table-seat.seat-right .seat-name{font-size:12px;min-width:0}
+.table-seat.seat-left .seat-points,.table-seat.seat-right .seat-points{font-size:clamp(17px,4.5vw,23px);letter-spacing:-.08em;white-space:nowrap}
+.table-seat.seat-left .seat-detail,.table-seat.seat-right .seat-detail{font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.table-seat.seat-left .seat-tools,.table-seat.seat-right .seat-tools{justify-content:flex-end;min-width:0}
+.table-seat.seat-left .seat-position,.table-seat.seat-right .seat-position,.table-seat.seat-left .seat-rank,.table-seat.seat-right .seat-rank{font-size:10px}
+.table-seat.seat-left .seat-tag,.table-seat.seat-right .seat-tag{font-size:9px;padding:0 3px}
+.table-seat.seat-left .yakitori-fuda,.table-seat.seat-right .yakitori-fuda{width:14px;height:14px}
+@media(max-width:380px){
+ .table-seat.seat-left .seat-name,.table-seat.seat-right .seat-name{font-size:11px}
+ .table-seat.seat-left .seat-points,.table-seat.seat-right .seat-points{font-size:18px}
+ .table-seat.seat-left .seat-position,.table-seat.seat-right .seat-position,.table-seat.seat-left .seat-rank,.table-seat.seat-right .seat-rank{font-size:9px}
+}
+@media(max-height:730px){
+ .table-seat.seat-left,.table-seat.seat-right{gap:2px;padding:4px 5px}
+ .table-seat.seat-left .seat-name,.table-seat.seat-right .seat-name{font-size:11px}
+ .table-seat.seat-left .seat-points,.table-seat.seat-right .seat-points{font-size:clamp(16px,4.4vw,20px)}
+ .table-seat.seat-left .seat-detail,.table-seat.seat-right .seat-detail{font-size:8px}
+ .table-seat.seat-left .seat-tag,.table-seat.seat-right .seat-tag{font-size:8px}
+}
+@media(max-width:355px){
+ .table-seat.seat-left,.table-seat.seat-right{gap:2px;padding:3px 4px}
+ .table-seat.seat-left .seat-heading,.table-seat.seat-right .seat-heading{gap:2px}
+ .table-seat.seat-left .seat-name,.table-seat.seat-right .seat-name{font-size:10px}
+ .table-seat.seat-left .seat-points,.table-seat.seat-right .seat-points{font-size:16px}
+ .table-seat.seat-left .seat-detail,.table-seat.seat-right .seat-detail{font-size:8px}
+ .table-seat.seat-left .seat-tools,.table-seat.seat-right .seat-tools{display:none}
+}
+/* 強い破壊操作は補助メニューに置き、通常卓表示を混雑させない */
+.reset-points-panel{background:#152a28;border:1px solid #4a6b63;border-radius:12px;padding:12px 11px;margin-top:12px}
+.reset-points-panel h3{font-size:14px;margin:0 0 6px;color:#ffdbb5}
+.reset-points-panel .tiny{margin:0 0 10px;line-height:1.6}
+.reset-points-panel .btn{background:#583830;border-color:#b27b67;color:#fff2e3;min-height:42px;white-space:normal;width:100%}
+
+
+/* v8.7: スマートフォン横向き用・四辺の表示パネルを完全に同形同寸へ */
+@media (orientation:landscape) and (min-width:500px){
+ :root{--landscape-seat-h:88px;--landscape-center-w:116px;--landscape-gap:6px;--landscape-seat-w:min(340px,calc((100% - var(--landscape-center-w) - 2 * var(--landscape-gap))/2))}
+ html,body{overflow-x:hidden}
+ body{min-height:100dvh}
+ .app-shell{position:relative;width:min(880px,100%);max-width:880px;margin:0 auto;padding:2px max(8px,env(safe-area-inset-right)) 2px max(8px,env(safe-area-inset-left))}
+ .header{height:23px;min-height:23px;padding:0 2px 1px;margin:0;align-items:center}
+ .brand{gap:5px}.brand .logo{width:21px;height:21px;font-size:12px;border-radius:5px}
+ .brand .eyebrow{display:none}.brand h1{font-size:14px;line-height:1}.brand h1 span{font-size:8px}
+ .header .small{min-height:22px;height:22px;padding:2px 9px;font-size:10px}
+ .status-strip{position:absolute;z-index:2;top:3px;left:140px;right:86px;min-height:18px;height:18px;margin:0;padding:0 4px;gap:6px;display:flex;flex-wrap:nowrap;overflow:hidden;border:0;border-radius:0;background:transparent;white-space:nowrap;font-size:9px}
+ .status-strip .dot{flex:0 0 6px;width:6px;height:6px}
+ .status-strip #statusLabel{flex:0 1 auto;overflow:hidden;text-overflow:ellipsis;min-width:0}
+ .status-strip #connectButton{margin-left:4px;white-space:nowrap;font-size:10px}
+ .status-strip #roomChip{font-size:8px;padding:1px 3px}
+ main{margin:0;padding:0}
+ .score-top{display:grid;grid-template-columns:minmax(130px,1fr) auto minmax(96px,144px);grid-template-rows:29px auto 39px;align-items:center;column-gap:6px;row-gap:2px;margin:0;min-width:0}
+ .score-top>.section-heading{grid-column:1;grid-row:1;align-self:center;justify-content:flex-start;margin:0;min-width:0}
+ .score-top>.section-heading>div:first-child{display:none}
+ .score-heading-actions{display:flex;gap:5px}
+ .gap-button,.score-top #undoButton{min-height:27px;height:27px;padding:3px 9px;font-size:11px}
+ .game-rules{grid-column:2;grid-row:1;align-self:center;display:flex;margin:0;padding:0;border:0;background:transparent;min-height:0}
+ .game-rules>span{display:none}
+ .game-seats-button{min-height:27px;height:27px;padding:3px 8px;font-size:10px}
+ .display-controls{grid-column:3;grid-row:1;margin:0;align-self:center;min-width:0}
+ .viewer-field{margin:0;width:100%;font-size:10px}
+ .viewer-field span{display:none}
+ .viewer-field select{margin:0;padding:0 20px 0 8px;width:100%;height:27px;min-height:27px;font-size:11px}
+ #viewerChoices[hidden],#viewerHelp[hidden],.view-buttons[hidden]{display:none!important}
+ #balanceAlert:not([hidden]),#saveErrorBanner:not([hidden]){position:fixed;top:28px;right:10px;max-width:min(335px,60vw);z-index:30;box-shadow:0 3px 18px #000c;margin:0;font-size:10px}
+ .mahjong-table{grid-column:1/-1;grid-row:2;min-width:0;margin:0}
+ .table-bezel{padding:4px;border-width:2px;border-radius:13px;box-shadow:0 3px 14px #0007}
+ .table-glass{display:grid;grid-template-columns:minmax(0,1fr) var(--landscape-center-w) minmax(0,1fr);grid-template-rows:repeat(3,var(--landscape-seat-h));column-gap:var(--landscape-gap);row-gap:3px;padding:3px 3px;border-radius:9px;justify-items:stretch;align-items:stretch}
+ .table-middle{display:contents}
+ .table-seat{display:grid!important;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:14px minmax(0,1fr) 14px;column-gap:8px;row-gap:3px;justify-content:initial!important;align-content:center!important;align-items:center;min-width:0;min-height:0!important;height:var(--landscape-seat-h);width:min(100%,340px);padding:7px 11px!important;gap:3px 8px!important;border-radius:8px}
+ .table-seat.seat-top,.table-seat.seat-bottom{width:min(340px,calc((100% - var(--landscape-center-w) - 2 * var(--landscape-gap))/2));justify-self:center}
+ .table-seat.seat-top{grid-column:1/4;grid-row:1}
+ .table-seat.seat-bottom{grid-column:1/4;grid-row:3}
+ .table-seat.seat-left{grid-column:1;grid-row:2;justify-self:center}
+ .table-seat.seat-right{grid-column:3;grid-row:2;justify-self:center}
+ .table-seat .seat-heading{grid-column:1/3;grid-row:1;display:flex;flex-wrap:nowrap;gap:3px;justify-content:space-between;min-width:0}
+ .table-seat .seat-name{grid-column:1;grid-row:2;font-size:15px!important;white-space:nowrap;overflow:hidden;min-width:0}
+ .table-seat .seat-points{grid-column:2;grid-row:2;font-size:clamp(22px,3.3vw,30px)!important;line-height:1.1;letter-spacing:-.065em;white-space:nowrap;min-width:0}
+ .table-seat .seat-detail{grid-column:1;grid-row:3;font-size:10px!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.1}
+ .table-seat .seat-tools{grid-column:2;grid-row:3;display:flex!important;justify-content:flex-end;min-width:0;align-items:center}
+ .table-seat .seat-rank,.table-seat .seat-position{font-size:10px!important}
+ .table-seat .seat-tag{font-size:9px!important;line-height:1.1;padding:1px 3px}
+ .table-seat .seat-tags{flex-wrap:nowrap}
+ .table-seat .yakitori-fuda{width:15px;height:15px}
+ /* 4人の枠は共通の寸法・角度・書体。左右の回転はしない。 */
+ .table-glass>.table-seat,.table-middle>.table-seat{transform:none!important;rotate:none!important;box-sizing:border-box}
+ .table-seat .seat-heading,.table-seat .seat-name,.table-seat .seat-points,.table-seat .seat-detail,.table-seat .seat-tools{transform:none!important;rotate:none!important}
+ .table-center{grid-column:2;grid-row:2;width:100%;height:var(--landscape-seat-h);padding:4px 3px;gap:1px;border-radius:8px}
+ .table-center-caption{font-size:7px}.table-center-hand{font-size:18px;line-height:1.15}
+ .table-center-divider{margin:2px auto}
+ .table-round-meta{font-size:9px;width:85%;gap:4px}
+ .table-round-meta strong{font-size:12px}
+ .table-dealer-tag{margin-top:2px;padding:1px 2px;font-size:9px}
+ .table-center-stick{display:none}
+ .table-legend{display:none}
+ .quick-dock{grid-column:1/-1;grid-row:3;position:static;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));margin:0!important;gap:6px;padding:0;max-width:none;min-width:0;width:100%;height:37px;min-height:0;background:none;border:0;box-shadow:none;backdrop-filter:none;transform:none}
+ .dock-btn{min-height:37px;height:37px;border-radius:8px;font-size:12px;gap:0}
+ .dock-symbol{display:none}
+ .finished-banner:not([hidden]),.shared-action-banner:not([hidden]){position:fixed;top:24px;right:10px;z-index:25;max-width:360px;font-size:10px}
+ .action-dialog,.extras-dialog,.modal{max-height:calc(100dvh - 12px);max-width:min(590px,calc(100vw - 20px));overflow:auto}
+ .modal-inner{padding:12px 16px}
+ .action-dialog .modal-inner{padding:10px 14px}
+ .action-dialog .tabs{gap:4px}
+ .action-dialog .tab{min-height:29px;padding:3px;font-size:10px}
+ .action-dialog .two-col label,.action-dialog label{margin-top:6px}
+ .action-dialog input:not([type="checkbox"]),.action-dialog select{height:31px;margin-top:4px}
+ .action-dialog .calc-preview{margin:6px 0 2px;padding:5px 8px}
+ .action-dialog .btn.wide{margin-top:5px;padding:7px}
+ .action-dialog .modal-actions{margin-top:6px}
+ .toast{bottom:8px;font-size:11px}
+}
+@media (orientation:landscape) and (min-width:500px) and (max-height:395px){
+ :root{--landscape-seat-h:clamp(60px,calc((100dvh - 125px)/3),88px)}
+ .table-seat{padding:4px 9px!important;grid-template-rows:11px minmax(0,1fr) 12px;row-gap:1px!important}
+ .table-seat .seat-name{font-size:12px!important}
+ .table-seat .seat-points{font-size:clamp(19px,3vw,26px)!important}
+ .table-seat .seat-detail{font-size:9px!important}
+ .table-center-hand{font-size:16px}
+ .quick-dock,.dock-btn{height:33px;min-height:33px}
+ .score-top{grid-template-rows:27px auto 34px;row-gap:1px}
+}
+
+@media (orientation:landscape) and (min-width:500px) and (max-width:690px){
+ :root{--landscape-center-w:88px;--landscape-gap:4px}
+ .app-shell{padding-left:4px;padding-right:4px}
+ .table-bezel{padding:3px;border-width:2px}
+ .table-glass{column-gap:4px;padding:2px}
+ .table-seat{padding:3px 5px!important;column-gap:3px!important}
+ .table-seat .seat-name{font-size:10px!important}
+ .table-seat .seat-points{font-size:clamp(15px,3vw,18px)!important;letter-spacing:-.08em}
+ .table-seat .seat-detail,.table-seat .seat-rank,.table-seat .seat-position{font-size:8px!important}
+ .table-seat .seat-tag{font-size:7px!important;padding:0 2px}
+ .table-seat .yakitori-fuda{width:12px;height:12px}
+ .table-center{padding:2px 1px}
+ .table-center-hand{font-size:13px}
+ .table-round-meta{font-size:8px}
+ .table-round-meta strong{font-size:10px}
+ .table-dealer-tag{font-size:7px}
+}
+@media(orientation:portrait) and (max-width:650px){
+ .landscape-recommendation{display:flex!important}
+}
+.landscape-recommendation{display:none;align-items:center;gap:6px;justify-content:center;background:#21463d;color:#e6fff4;border:1px solid #568976;border-radius:8px;padding:7px;font-size:11px;margin-bottom:5px}
+
+
+/* v8.9: 全席共通の読みやすい名前・焼き鳥札と現在の親の強調表示 */
+.table-seat.is-dealer{border-color:#f4c26a!important;box-shadow:inset 0 0 0 1px #ffdc834d,0 0 0 1px #f4c26a33,0 0 13px #f4bd5440}
+.seat-dealer-badge{display:inline-flex;flex:0 0 auto;align-items:center;justify-content:center;align-self:center;padding:1px 6px;min-height:18px;border-radius:5px;background:#f6c36f;color:#35200d;font-size:11px;font-weight:950;line-height:1;border:1px solid #fff0bc;box-shadow:0 0 8px #efb64d66}
+@media (orientation:landscape) and (min-width:500px){
+ .table-seat{grid-template-rows:17px minmax(0,1fr) 14px;column-gap:6px!important;row-gap:1px!important}
+ .table-seat .seat-name{font-size:clamp(15px,2.2vw,19px)!important;gap:7px;overflow:hidden;align-items:center}
+ .table-seat .seat-name-text{flex:0 1 auto;min-width:0;max-width:100%}
+ .table-seat .yakitori-fuda,.table-seat.seat-left .yakitori-fuda,.table-seat.seat-right .yakitori-fuda{flex:0 0 auto;width:clamp(19px,2.7vw,23px);height:clamp(19px,2.7vw,23px);border-width:1.5px;box-shadow:0 0 0 1px #fbc76b55,0 0 8px #f3a73c66}
+ .table-seat .seat-position,.table-seat .seat-rank{font-size:11px!important}
+ .table-seat .seat-dealer-badge{font-size:11px;min-height:18px;padding:1px 7px}
+ .table-seat .seat-heading{gap:5px}
+ .table-center-caption,.table-center-divider{display:none}
+ .table-center{gap:2px;padding:5px 3px}
+ .table-center-hand{order:1;font-size:17px;line-height:1.1}
+ .table-center .table-dealer-tag{order:2;display:block;margin:2px 0 1px;background:#e9ae54;border:1px solid #ffe0a4;border-radius:5px;padding:3px 4px;color:#2d1909;font-size:clamp(11px,1.65vw,13px);line-height:1.1;font-weight:950;max-width:100%;box-shadow:0 0 9px #e6a74855}
+ .table-center .table-round-meta{order:3;font-size:9px;line-height:1.05;width:94%}
+ .table-center .table-round-meta+ .table-round-meta{order:4}
+ .table-center .table-round-meta strong{font-size:10px}
+}
+@media (orientation:landscape) and (min-width:500px) and (max-height:395px){
+ .table-seat{grid-template-rows:14px minmax(0,1fr) 11px}
+ .table-seat .seat-dealer-badge{min-height:14px;font-size:10px;padding:0 5px}
+ .table-seat .seat-name{font-size:clamp(15px,2.15vw,18px)!important}
+ .table-seat .yakitori-fuda,.table-seat.seat-left .yakitori-fuda,.table-seat.seat-right .yakitori-fuda{width:clamp(18px,2.6vw,22px);height:clamp(18px,2.6vw,22px)}
+ .table-center{gap:1px;padding:3px 2px}
+ .table-center-hand{font-size:16px}
+ .table-center .table-dealer-tag{font-size:11px;padding:2px 3px}
+ .table-center .table-round-meta{font-size:8px}
+ .table-center .table-round-meta strong{font-size:9px}
+}
+@media (orientation:landscape) and (min-width:500px) and (max-width:690px){
+ .table-seat .seat-position,.table-seat .seat-rank{font-size:9px!important}
+ .table-seat .seat-name{gap:4px;font-size:15px!important}
+ .table-seat .yakitori-fuda,.table-seat.seat-left .yakitori-fuda,.table-seat.seat-right .yakitori-fuda{width:19px;height:19px}
+ .table-seat .seat-dealer-badge{min-height:14px;font-size:9px;padding:0 4px}
+ .table-center .table-dealer-tag{font-size:10px;line-height:1.1;padding:2px 1px}
+ .table-center-hand{font-size:14px}
+}
+
+
+/* v8.9.3: 5段階の点数カラーを卓・一覧・最終結果へ共通適用。 */
+.table-seat.score-critical .seat-points,
+.score-card.score-critical .score,
+.result-points.score-critical{color:#ff565e;text-shadow:0 0 7px #ff364f99,0 0 17px #a8213455}
+.table-seat.score-warning .seat-points,
+.score-card.score-warning .score,
+.result-points.score-warning{color:#ffb35c;text-shadow:0 0 7px #f6a03978,0 0 16px #9b571a45}
+.table-seat.score-twenties .seat-points,
+.score-card.score-twenties .score,
+.result-points.score-twenties{color:#ffe17a;text-shadow:0 0 7px #ffcc5d80,0 0 17px #96732f40}
+.table-seat.score-normal .seat-points,
+.score-card.score-normal .score,
+.result-points.score-normal{color:#ecf5f3;text-shadow:0 0 5px #c1ffed44,0 0 13px #b3cfc01a}
+.table-seat.score-goal .seat-points,
+.score-card.score-goal .score,
+.result-points.score-goal{color:#67f5b2;text-shadow:0 0 8px #44eeb6b2,0 0 19px #39d6a966}
+
+</style>
+  <title>卓点 v8.9.3 — 西入・北入ルール対応</title>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="header">
+      <div class="brand"><div class="logo">🀄</div><div><p class="eyebrow">v8.9.3 · 西入・北入・親自動判定</p><h1>卓点 <span>TAKUTEN</span></h1></div></div>
+      <button id="shareButton" class="btn accent small">↗ 共有</button>
+    </header>
+
+    <div class="status-strip"><span id="statusDot" class="dot"></span><span id="statusLabel">端末に保存 · オフライン対応</span><span id="roomChip" class="room-chip" hidden></span><button id="connectButton" class="text-btn">共有ルーム</button></div>
+
+    <div id="updateBanner" class="update-banner" hidden>アプリの更新を検出しました。<button id="updateReload" type="button">再読み込み</button></div>
+    <div class="landscape-recommendation" role="status">↻ スマホを横向きにすると、4人の点数を同じ大きさで表示できます</div>
+    <main>
+      <div id="notice" class="notice" hidden role="status"></div>
+      <div id="saveErrorBanner" class="save-error" role="alert" hidden><span>⚠ この端末に記録を保存できません。空き容量やプライベートモードをご確認ください。</span><button type="button" id="saveErrorBackup">バックアップ</button></div><div id="sharedActionBanner" class="shared-action-banner" role="status" hidden><span id="sharedActionText"></span><button type="button" id="dismissSharedAction" aria-label="通知を閉じる">×</button></div>
+      <section class="participants-bar" aria-label="参加メンバー" hidden>
+        <div class="participants-bar-heading"><div><span class="participants-label">参加中のメンバー</span><div id="participantsSummary" class="participants-summary"></div></div>
+          <button type="button" id="editParticipantsButton" class="btn accent participants-change">参加者・席順を設定</button></div>
+      </section>
+      <section class="score-top">
+        <div class="section-heading"><div><p class="eyebrow">AUTOMATIC TABLE DISPLAY</p><h2>現在の持ち点</h2></div><div class="score-heading-actions"><button type="button" id="gapsButton" class="btn gap-button small">⇄ 順位差</button><button id="undoButton" class="btn ghost small">↶ 取り消す</button></div></div>
+        <div id="finishedBanner" class="finished-banner" hidden>対局終了済み <button id="openFinishedResults" type="button">最終結果を見る</button></div>
+        <div id="balanceAlert" class="balance-alert" role="alert" hidden></div><div class="game-rules" aria-label="今回の対局ルール"><span>開始 <strong id="currentStartPoints">30,000</strong>点</span><span class="game-goal">目標 <strong id="currentGoalPoints">35,000</strong>点</span><button type="button" id="changeSeatButton" class="game-seats-button">メンバー・席順 ↗</button></div>
+        <div class="display-controls">
+          <label class="viewer-field" for="viewerSelect"><span>このスマホで見る人（自分）</span><select id="viewerSelect" aria-label="自分のプレイヤー名を選ぶ"></select></label>
+          <div class="view-buttons" role="group" aria-label="スコア表示形式" hidden>
+            <button type="button" id="tableViewButton" class="view-btn active" aria-pressed="true">▦ 卓表示</button>
+            <button type="button" id="listViewButton" class="view-btn" aria-pressed="false">☷ 一覧</button>
+          </div>
+        </div>
+        <div id="viewerChoices" class="viewer-choices" role="group" aria-label="このスマホを使う人を選ぶ" hidden></div>
+        <p id="viewerHelp" class="viewer-help" hidden></p>
+        <div id="mahjongTable" class="mahjong-table" aria-label="自分が下の麻雀卓スコア表示">
+          <div class="table-bezel"><div class="table-glass">
+            <div id="tableSeatTop" class="table-seat seat-top" aria-label="対面"></div>
+            <div class="table-middle">
+              <div id="tableSeatLeft" class="table-seat seat-left" aria-label="上家"></div>
+              <div class="table-center" aria-label="局情報">
+                <span class="table-center-caption">ROUND</span>
+                <strong id="centerHand" class="table-center-hand">東1局</strong>
+                <div class="table-center-divider"></div>
+                <div class="table-round-meta"><span>本場</span><strong id="centerHonba">0</strong></div>
+                <div class="table-round-meta"><span>供託</span><strong id="centerSticks">0</strong></div>
+                <div class="table-dealer-tag" id="centerDealer">親 —</div>
+                <div class="table-center-stick" aria-hidden="true"><i></i><i></i><i></i></div>
+              </div>
+              <div id="tableSeatRight" class="table-seat seat-right" aria-label="下家"></div>
+            </div>
+            <div id="tableSeatBottom" class="table-seat seat-bottom" aria-label="自分"></div>
+          </div></div>
+          <div class="table-legend"><span>白：3万点以上　<span style="color:#ffe17a">●</span> 2万点台　<span style="color:#ffb35c">●</span> 2万点未満　<span style="color:#ff565e">●</span> 1万点以下　<i class="legend-green"></i> 35,000点超</span><span>自分は下</span></div>
+        </div>
+<nav id="quickDock" class="quick-dock" aria-label="卓上で点数操作">
+          <button type="button" class="dock-btn" data-quick="ron"><span class="dock-symbol">🀄</span><span>ロン</span></button>
+          <button type="button" class="dock-btn" data-quick="tsumo"><span class="dock-symbol">✦</span><span>ツモ</span></button>
+          <button type="button" class="dock-btn" data-quick="riichi"><span class="dock-symbol">▤</span><span>リーチ</span></button>
+          <button type="button" class="dock-btn" data-quick="draw"><span class="dock-symbol">≋</span><span>流局</span></button>
+          <button type="button" class="dock-btn" data-quick="extras"><span class="dock-symbol">⋯</span><span>その他</span></button>
+        </nav>
+        <div id="scoreGrid" class="score-grid" hidden></div>
+        <p id="totalLabel" class="muted-help" hidden></p><p id="syncHelp" class="sync-help" hidden></p>
+      </section>
+
+
+
+      <dialog id="actionDialog" class="modal action-dialog"><div class="modal-inner"><section class="action-panel">
+        <div class="section-heading"><div><p class="eyebrow">SCORE ACTIONS</p><h2>点数を動かす</h2></div></div>
+        <div id="tabs" class="tabs" role="tablist" aria-label="操作を選択">
+          <button class="tab active" data-tab="ron" aria-selected="true">ロン</button>
+          <button class="tab" data-tab="tsumo" aria-selected="false">ツモ</button>
+          <button class="tab" data-tab="riichi" aria-selected="false">リーチ</button>
+          <button class="tab" data-tab="transfer" aria-selected="false">点数移動</button>
+          <button class="tab" data-tab="draw" aria-selected="false">流局</button>
+        </div>
+        <div class="tab-pane active" id="pane-ron">
+          <div class="two-col"><label>アガった人<select id="ronWinner"></select></label><label>放銃した人<select id="ronLoser"></select></label></div>
+          <div class="score-method" data-kind="ron" aria-label="点数入力方式"><button type="button" class="method-btn active" data-kind="ron" data-method="auto" aria-pressed="true">符・翻で計算</button><button type="button" class="method-btn" data-kind="ron" data-method="manual" aria-pressed="false">点数を手入力</button></div>
+          <div id="ronAutoFields" class="auto-fields">
+            <div class="two-col"><label>符<select id="ronFu"></select></label><label>翻<select id="ronHan"></select></label></div>
+            <p id="ronAutoResult" class="auto-result" role="status"></p>
+          </div>
+          <div id="ronManualFields" hidden>
+            <label>ロンの点数 <small>本場分は自動加算</small><input id="ronPoints" inputmode="numeric" type="number" min="100" step="100" value="3900"></label>
+            <div class="preset-row" data-target="ronPoints"><button type="button" data-points="1000">1,000</button><button type="button" data-points="2000">2,000</button><button type="button" data-points="3900">3,900</button><button type="button" data-points="5200">5,200</button><button type="button" data-points="8000">8,000</button><button type="button" data-points="12000">12,000</button></div>
+          </div>
+          <p id="ronPreview" class="calc-preview"></p>
+          <button id="ronSubmit" class="btn primary wide">ロンを確定</button>
+        </div>
+        <div class="tab-pane" id="pane-tsumo" hidden>
+          <label>アガった人<select id="tsumoWinner"></select></label>
+          <div class="score-method" data-kind="tsumo" aria-label="点数入力方式"><button type="button" class="method-btn active" data-kind="tsumo" data-method="auto" aria-pressed="true">符・翻で計算</button><button type="button" class="method-btn" data-kind="tsumo" data-method="manual" aria-pressed="false">点数を手入力</button></div>
+          <div id="tsumoAutoFields" class="auto-fields">
+            <div class="two-col"><label>符<select id="tsumoFu"></select></label><label>翻<select id="tsumoHan"></select></label></div>
+            <p id="tsumoAutoResult" class="auto-result" role="status"></p>
+          </div>
+          <div id="tsumoManualFields" hidden>
+            <div class="two-col"><label>子1人の支払額<input id="tsumoChild" type="number" inputmode="numeric" min="100" step="100" value="1000"></label><label id="tsumoDealerLabel">親の支払額 <small>親がアガった場合は使いません</small><input id="tsumoDealer" type="number" inputmode="numeric" min="100" step="100" value="2000"></label></div>
+            <div class="preset-row" data-target="tsumoChild"><button type="button" data-points="500">500</button><button type="button" data-points="1000">1,000</button><button type="button" data-points="2000">2,000</button><button type="button" data-points="4000">4,000</button></div>
+          </div>
+          <p id="tsumoPreview" class="calc-preview"></p>
+          <button id="tsumoSubmit" class="btn primary wide">ツモを確定</button>
+        </div>
+        <div class="tab-pane" id="pane-riichi" hidden>
+          <label>リーチした人<select id="riichiPlayer"></select></label>
+          <p class="calc-preview">宣言者から1,000点を引き、供託に1本積みます。アガリ時に勝者が供託をすべて受け取ります。</p>
+          <button id="riichiSubmit" class="btn primary wide">リーチ棒を出す（−1,000）</button>
+        </div>
+        <div class="tab-pane" id="pane-transfer" hidden>
+          <div class="two-col"><label>支払う人<select id="transferFrom"></select></label><label>受け取る人<select id="transferTo"></select></label></div>
+          <label>移動する点数<input id="transferPoints" type="number" inputmode="numeric" min="100" step="100" value="1000"></label>
+          <div class="preset-row" data-target="transferPoints"><button data-points="100">100</button><button data-points="1000">1,000</button><button data-points="2000">2,000</button><button data-points="5000">5,000</button></div>
+          <p class="calc-preview">局・本場・供託は変えずに、指定した2人の間で点数を移動します。</p>
+          <button id="transferSubmit" class="btn primary wide">点数を移動する</button>
+        </div>
+        <div class="tab-pane" id="pane-draw" hidden>
+          <p class="form-instruction">テンパイしていた人を選択してください。</p>
+          <div id="tenpaiList" class="check-grid"></div>
+          <p id="drawParentGuide" class="draw-parent-guide" role="status">親がテンパイなら連荘、ノーテンなら親流れ。最終局だけノーテンでも連荘します。</p>
+          <p id="drawHint" class="calc-preview"></p>
+          <button id="drawSubmit" class="btn primary wide">流局を確定</button>
+        </div>
+      </section><div class="modal-actions"><button type="button" class="btn ghost" data-close="actionDialog">閉じる</button></div></div></dialog>
+
+
+
+    </main>
+  </div>
+
+
+
+<dialog id="gapsDialog" class="modal gaps-dialog" aria-labelledby="gapsTitle"><div class="modal-inner">
+    <h2 id="gapsTitle">順位ごとの点差</h2>
+    <p id="gapsSummary" class="tiny">自分を基準に、ほかの人との点差を表示します。</p>
+    <div id="rankGapList" class="rank-gap-list" aria-live="polite"></div>
+    <p class="tiny">＋は自分が上回っている点数、−は自分が下回っている点数です。同点は0点。逆転ラインは相手からの直撃ロンによる総支払額（本場込み）の理論値で、供託は自分に加算・同点は逆転扱いしません。実際のアガリ点数とは異なる場合があります。</p>
+    <div class="modal-actions"><button type="button" class="btn ghost" data-close="gapsDialog">閉じる</button></div>
+  </div></dialog>
+
+  <dialog id="extrasDialog" class="modal extras-dialog"><div class="modal-inner"><h2>局情報・履歴</h2><p class="tiny">本場の変更や取り消しは、ここから操作できます。</p><p class="tiny">【親・延長ルール】通常の流局は親テンパイなら連荘、ノーテンなら親交代。南4局・西4局・北4局は親ノーテンでも連荘します。最終局で子がアガったとき全員35,000点未満なら西入・北入し、到達者がいれば対局終了です。</p>      <details class="round-settings" open><summary>局情報・本場の手動調整 <span aria-hidden="true">⌄</span></summary><section class="round-panel">
+        <div class="round-item"><span class="round-caption">局</span><strong id="handLabel">東1局</strong></div>
+        <div class="round-item"><span class="round-caption">親</span><strong id="dealerLabel">—</strong></div>
+        <div class="round-item"><span class="round-caption">本場</span><div class="stepper"><button id="honbaMinus" aria-label="本場を減らす">−</button><strong id="honbaLabel">0</strong><button id="honbaPlus" aria-label="本場を増やす">＋</button></div></div>
+        <div class="round-item"><span class="round-caption">供託</span><strong id="sticksLabel">0本</strong></div>
+      </section></details>
+      <section class="quick-edit-panel" aria-label="持ち点・名前の修正">
+        <h3>点数・名前を修正</h3>
+        <div class="quick-edit-controls">
+          <label for="editFromExtrasPlayer">修正する人<select id="editFromExtrasPlayer" aria-label="修正するプレイヤー"></select></label>
+          <button type="button" id="editFromExtrasButton" class="btn accent">修正を開く</button>
+        </div>
+        <p class="tiny">通常のロン・ツモ・リーチは卓の下にあるボタンから入力できます。</p>
+      </section>
+      <section class="reset-points-panel" aria-label="全員の点数リセット">
+        <h3>持ち点を30,000点に戻す</h3>
+        <p class="tiny">現在の参加者・席順はそのままで新しい対局を始めます。全員30,000点、東1局、0本場、供託0本、全員焼き鳥に戻ります。現在の対局の操作履歴は消えます。</p>
+        <button id="resetAllToThirtyButton" type="button" class="btn">↺ 全員30,000点にリセット</button>
+      </section>
+      <section class="history-panel"><div class="section-heading"><div><p class="eyebrow">ACTIVITY</p><h2>操作履歴</h2></div><button id="newGameButton" class="text-btn">新しい対局</button></div><div id="historyList" class="history-list"></div></section>
+      <section class="game-completion" aria-label="対局終了と結果">
+        <h3>対局終了・最終結果</h3><p class="tiny">対局終了後は点数入力を停止します。結果はこの端末、共有卓では全員に保存されます。</p>
+        <div class="backup-buttons"><button id="finishGameButton" type="button" class="btn primary">対局を終了する</button><button id="showResultsButton" type="button" class="btn accent">最終結果を見る</button><button id="pastResultsButton" type="button" class="btn ghost">過去の対局を見る</button></div>
+      </section>
+      <section class="offline-options" aria-label="オフライン利用とバックアップ">
+        <h3>オフライン・バックアップ</h3>
+        <p id="offlineReadyText" class="tiny" role="status">オフライン利用の準備状況を確認中…</p>
+        <p class="tiny">端末単独モードは圏外でも操作できます。共有ルームはネット接続が必要です。点数はこの端末内に保存されます。</p>
+        <div class="backup-buttons">
+          <button type="button" id="backupSave" class="btn accent">バックアップを保存</button>
+          <button type="button" id="backupOpen" class="btn ghost">バックアップを読み込む</button>
+        </div>
+        <input type="file" id="backupFile" accept=".json,application/json" hidden aria-label="バックアップファイルを選択">
+      </section><div class="modal-actions"><button type="button" class="btn ghost" data-close="extrasDialog">閉じる</button></div></div></dialog>
+  <dialog id="resultsDialog" class="modal" aria-labelledby="resultsTitle"><div class="modal-inner">
+    <p class="eyebrow">GAME RESULT</p><h2 id="resultsTitle">最終結果</h2>
+    <p id="resultsSummary" class="tiny"></p>
+    <div id="resultsList" class="results-list"></div>
+    <p id="resultsRuleNote" class="tiny">焼き鳥は未アガリ表示のみです。焼き鳥の罰符、ウマ・オカ等は計算しません。</p>
+    <div class="modal-actions"><button id="resumeGameButton" type="button" class="btn accent" hidden>対局を再開</button><button type="button" class="btn ghost" data-close="resultsDialog">閉じる</button></div>
+  </div></dialog>
+  <dialog id="pastResultsDialog" class="modal" aria-labelledby="pastResultsTitle"><div class="modal-inner"><h2 id="pastResultsTitle">保存した対局結果</h2><p class="tiny">終了時にこの端末に保存した最終結果です。最大80対局を保存します。端末データを消去すると失われるため、必要ならバックアップしてください。</p><div id="pastResultsList" class="results-list"></div><div class="modal-actions"><button type="button" class="btn ghost" data-close="pastResultsDialog">閉じる</button></div></div></dialog>
+  <dialog id="editDialog" class="modal"><form id="editForm" class="modal-inner">
+    <h2>プレイヤーの修正</h2><p class="tiny">誤操作防止のため、変更は内容を確認してから確定します。</p>
+    <input type="hidden" id="editId"><label>名前<input id="editName" type="text" maxlength="18" required></label>
+    <div class="score-method edit-method" aria-label="持ち点の修正方法"><button type="button" class="method-btn active" data-edit-method="manual" aria-pressed="true">持ち点を入力</button><button type="button" class="method-btn" data-edit-method="sticks" aria-pressed="false">点棒を数える</button></div>
+    <div id="editManualFields"><label>現在の持ち点<input id="editPoints" type="number" step="100" inputmode="numeric" required></label></div>
+    <div id="editStickFields" hidden><p class="tiny">手元にある点棒の本数を入力してください。合計点を自動計算します（0枚から開始）。</p><div id="stickRows" class="stick-rows"></div><div class="stick-summary"><span>点棒の合計</span><strong id="stickTotal">0点</strong><small id="stickDelta"></small></div><button type="button" id="stickClear" class="btn ghost small">本数をすべて0に戻す</button></div>
+    <p id="editWarning" class="edit-warning" role="status"></p>
+    <div class="modal-actions"><button type="button" class="btn ghost" data-close="editDialog">キャンセル</button><button id="editSave" type="submit" class="btn primary">確認して保存</button></div>
+  </form></dialog>
+
+  <dialog id="newGameDialog" class="modal"><form id="newGameForm" class="modal-inner"><h2>参加者・席順の設定</h2><p class="tiny">同じメンバーの席だけを入れ替える場合は、持ち点・親・本場・局情報・リーチ状態を引き継ぎます。メンバー・人数・開始点数を変更すると、新しい対局として初期化します。</p><div class="two-col"><label>人数<select id="setupCount"><option value="4">4人麻雀</option><option value="3">3人麻雀</option></select></label><label>開始点数<input id="setupPoints" type="number" inputmode="numeric" min="1000" step="1000" value="30000"></label></div><div class="roster-section"><div class="roster-header"><strong>いつものメンバー</strong><span id="setupCountLabel">4/4人</span></div><div id="rosterChoices" class="roster-choices" role="group" aria-label="参加メンバーを選択"></div><div id="rosterReplacePanel" class="roster-replace" hidden><p id="rosterReplaceMessage"></p><div id="rosterReplaceTargets" class="roster-replace-targets"></div><button id="rosterReplaceCancel" type="button" class="text-btn">交代をやめる</button></div><p class="tiny roster-help">6人から参加者を選べます。満員のときは交代したい人を押し、次に外す人を選ぶだけです。参加者を決めたら、下の席順で実際に座った場所を設定してください。東家が最初の親です。</p></div><section class="seat-assignment" aria-label="参加者の席順を選ぶ">
+      <div class="seat-assignment-title"><strong>座る位置を指定</strong><span class="seat-hint">選ぶと席を交換</span></div>
+      <p class="tiny seat-explain">参加者を決めてから、東・南・西・北のそれぞれに座った人を選んでください。すでに別の席にいる人を選ぶと交換されます。東家が最初の親です。</p>
+      <div id="seatAssignments" class="seat-assignments"></div>
+      <p id="seatOrderSummary" class="seat-order-summary" aria-live="polite"></p>
+    </section>
+    <details class="setup-name-details"><summary>名前を直接編集する（任意）</summary><div id="setupNames" class="setup-names"></div></details><div class="modal-actions"><button type="button" class="btn ghost" data-close="newGameDialog">キャンセル</button><button class="btn primary" id="setupSubmit" type="submit">変更内容を確認</button></div></form></dialog>
+
+  <dialog id="shareDialog" class="modal"><div class="modal-inner"><h2>この卓を共有</h2><p id="shareDescription" class="tiny"></p><div class="share-link"><input type="text" id="shareUrl" readonly aria-label="共有URL"><button id="copyShare" class="btn primary small">コピー</button></div><button id="nativeShare" class="btn accent wide">スマホの共有メニューを開く</button><div class="modal-actions"><button type="button" class="btn ghost" data-close="shareDialog">閉じる</button></div></div></dialog>
+
+  <dialog id="roomDialog" class="modal"><div class="modal-inner"><h2>リアルタイム共有</h2><p id="roomGuide" class="tiny"></p><button id="createRoomButton" class="btn primary wide">今の点数で共有ルームを作る</button><label>既存のルーム番号<input type="text" id="joinCode" maxlength="10" placeholder="例：A7K9T3BZQ2" autocapitalize="characters"></label><button id="joinRoomButton" class="btn accent wide">このルームに参加</button><p class="tiny">参加した人は全員が編集できます。点数はネット経由で自動同期します。URLは卓のメンバーだけに共有してください。</p><div class="modal-actions"><button id="leaveRoomButton" class="btn ghost" hidden>この端末の記録に戻る</button><button type="button" class="btn ghost" data-close="roomDialog">閉じる</button></div></div></dialog>
+
+
+
+  <div id="toast" class="toast" aria-live="polite" hidden></div>
+  <script src="firebase-config.js"></script>
+<script>
+const firebaseConfig = window.TAKUTEN_FIREBASE_CONFIG || {};
+// 標準的なリーチ麻雀の基本点。供託・本場はアプリ本体で別途加算。
+const FU_VALUES = [20,25,30,40,50,60,70,80,90,100,110];
+const STICK_VALUES = [10000,5000,1000,500,100];
+const ceiling100 = n => Math.ceil(n / 100) * 100;
+
+function scoreFromHanFu({ han, fu, isDealer, method }) {
+  if (!Number.isInteger(han) || han < 1 || han > 13 || !FU_VALUES.includes(fu)) throw Error('翻数・符数を選び直してください。');
+  if (!['ron', 'tsumo'].includes(method)) throw Error('ロンかツモを選んでください。');
+  if (fu === 20 && method === 'ron') throw Error('20符はツモ用です。ロンの場合は符を選び直してください。');
+  if (fu === 20 && han === 1) throw Error('20符1翻は通常のアガリになりません。');
+  if (fu === 25 && han === 1) throw Error('25符1翻は通常のアガリになりません。');
+  let base, grade;
+  if (han >= 13) { base = 8000; grade = '数え役満'; }
+  else if (han >= 11) { base = 6000; grade = '三倍満'; }
+  else if (han >= 8) { base = 4000; grade = '倍満'; }
+  else if (han >= 6) { base = 3000; grade = '跳満'; }
+  else if (han >= 5) { base = 2000; grade = '満貫'; }
+  else {
+    base = fu * (2 ** (han + 2));
+    if (base >= 2000) { base = 2000; grade = '満貫'; }
+    else grade = `${fu}符${han}翻`;
+  }
+  const ron = ceiling100(base * (isDealer ? 6 : 4));
+  const tsumoChild = ceiling100(base * (isDealer ? 2 : 1));
+  const tsumoDealer = ceiling100(base * 2);
+  return { base, grade, ron, tsumoChild, tsumoDealer };
+}
+
+function countSticks(counts) {
+  let total = 0;
+  for (const value of STICK_VALUES) {
+    const count = counts[value] ?? 0;
+    if (!Number.isSafeInteger(count) || count < 0 || count > 200) throw Error('点棒の本数は0〜200本で入力してください。');
+    total += value * count;
+  }
+  if (!Number.isSafeInteger(total) || total > 1000000) throw Error('合計が100万点を超えています。');
+  return total;
+}
+
+
+
+
+const $ = (id) => document.getElementById(id);
+const yen = (n) => Number(n).toLocaleString('ja-JP');
+const winds = ['東', '南', '西', '北'];
+const STORAGE_KEY = 'takuten-local-v1';
+const RESULTS_STORAGE_KEY = 'takuten-archived-results-v82';
+// いつものメンバー：4人の初期メンバーと、選択可能な6人の名簿。
+const REGULAR_MEMBERS = ['かず', 'たけ', 'たろう', 'つよし', 'ゆか', 'りさ'];
+const DEFAULT_MEMBERS = ['かず', 'たけ', 'たろう', 'ゆか'];
+const FIREBASE_VERSION = '12.19.0';
+let remote = null;
+let roomCode = null;
+let pendingRoomCode = new URLSearchParams(location.hash.slice(1)).get('room') || null;
+let roomReady = false;
+let serverConnected = false;
+let stopWatching = null;
+let busy = false;
+let firebaseError = '';
+let firebaseBooting = false;
+let offlineCacheReady = false;
+let toastTimer;
+let mode = 'ron';
+const scoreMethod = { ron: 'auto', tsumo: 'auto' };
+let editMethod = 'manual';
+let replacementCandidate = null;
+let seatOrderDraft = [];
+let setupForceNewGame = false;
+// 画面の向きは各自の端末だけに保存。共有ルームの点数データには追加しない。
+const VIEWER_KEY_PREFIX = 'takuten-viewer-v7-';
+const DISPLAY_KEY = 'takuten-display-v7';
+// この端末・タブを識別する文字列。プレイヤー名と別にして、共有更新を通知する。
+const CLIENT_ID = (()=>{
+  try { let v=sessionStorage.getItem('takuten-client-v82');
+    if(!v){v=crypto.randomUUID ? crypto.randomUUID() : Array.from(crypto.getRandomValues(new Uint8Array(12)),x=>x.toString(16).padStart(2,'0')).join('');sessionStorage.setItem('takuten-client-v82',v);}
+    return v;
+  }catch{return 'session-'+Math.random().toString(36).slice(2);}
+})();
+let shareNoticeTimer=null;
+let saveFailed=false;
+function keepViewerIdentity(before,after){
+  try {
+    const key=viewerKey(),selected=localStorage.getItem(key);
+    if(!selected)return;
+    const name=before.players.find(p=>p.id===selected)?.name;
+    if(!name)return;
+    const next=after.players.find(p=>p.name===name);
+    if(next)localStorage.setItem(key,next.id);
+    else localStorage.removeItem(key);
+  }catch{}
+}
+function actorInfo(){const id=selectedViewerId();return {clientId:CLIENT_ID,actorName:id ? firstName(state,id) : '参加者（未選択）'};}
+function informOtherPlayers(action){
+  const bar=$('sharedActionBanner');
+  if(!bar || !action)return;
+  const who=action.actorName || 'ほかの参加者';
+  $('sharedActionText').textContent=`${who} が更新：${action.label}。最新の持ち点をご確認ください。`;
+  bar.hidden=false;
+  clearTimeout(shareNoticeTimer);
+  shareNoticeTimer=setTimeout(()=>{bar.hidden=true;},8000);
+}
+
+// 焼き鳥＝まだロン・ツモで一度もアガっていない人。旧データは未登録として扱う。
+function hasWon(s, id){ return (s.wonIds || []).includes(id); }
+function rankOf(s, person){ return 1+s.players.filter(p=>p.points>person.points).length; }
+function formatSigned(n){ return (n>0?'+':n<0?'−':'±')+yen(Math.abs(n))+'点'; }
+function renderGaps(){
+  const viewer=state.players.find(p=>p.id===selectedViewerId()) || state.players.find(p=>p.id===effectiveViewerId());
+  const ordered=[...state.players].sort((a,b)=>b.points-a.points || a.id.localeCompare(b.id));
+  $('gapsSummary').textContent=selectedViewerId()
+    ? `${viewer.name}の持ち点：${yen(viewer.points)}点 ／ 各順位との差`
+    : `仮の基準：${viewer.name}（先に「自分」を選ぶと切り替わります）`;
+  const list=$('rankGapList'); list.replaceChildren();
+  for(const p of ordered){
+    const own=p.id===viewer.id;
+    const line=document.createElement('div');line.className='rank-gap-row'+(own?' my-rank-gap':'');
+    const ranking=document.createElement('span');ranking.className='rank-gap-position'; ranking.textContent=rankOf(state,p)+'位';
+    const whom=document.createElement('div');whom.className='rank-gap-player';
+    const name=document.createElement('strong');name.textContent=p.name+(own?'（自分）':'');
+    const points=document.createElement('small');points.textContent=yen(p.points)+'点';whom.append(name,points);
+    const delta=document.createElement('strong');delta.className='rank-gap-value';
+    const diff=viewer.points-p.points;
+    delta.textContent=own?'基準：0点':formatSigned(diff);
+    // 自分が相手を直接ロンした場合、相手は支払額だけ減り、自分は同額+供託を受け取る。
+    // 同点は逆転としない。数字は本場込みの理論上の合計支払額（100点単位）。
+    if(!own && p.points>=viewer.points){
+      const required=Math.max(100,(Math.floor((p.points-viewer.points-state.sticks*1000)/200)+1)*100);
+      const guide=document.createElement('small'); guide.className='rank-gap-reverse';
+      guide.textContent=`${p.name}から直撃ロンなら ${yen(required)}点以上の支払いで逆転`;
+      whom.append(guide);
+    }
+    if(diff>0 && !own)delta.classList.add('positive');
+    if(diff<0 && !own)delta.classList.add('negative');
+    line.append(ranking,whom,delta);list.append(line);
+  }
+}
+
+let scoreDisplay = 'table';
+// この版では卓表示がメイン。従来版で一覧選択した端末でも卓を初期表示。
+function viewerKey(){ return VIEWER_KEY_PREFIX+(roomCode||pendingRoomCode||'local'); }
+function selectedViewerId(){
+  try {
+    const value=localStorage.getItem(viewerKey());
+    const name=localStorage.getItem(viewerKey()+'-name');
+    if(state.players.some(p=>p.id===value && (!name || p.name===name)))return value;
+    // 座席が入れ替わっても、同じ名前の人を「自分」として保持する。
+    const moved=state.players.find(p=>p.name===name);
+    if(name && moved){localStorage.setItem(viewerKey(),moved.id);return moved.id;}
+  } catch {}
+  return '';
+}
+function chooseViewer(id){
+  try {
+    const person=state.players.find(p=>p.id===id);
+    if(person){localStorage.setItem(viewerKey(),id);localStorage.setItem(viewerKey()+'-name',person.name);}
+    else {localStorage.removeItem(viewerKey());localStorage.removeItem(viewerKey()+'-name');}
+  }catch{}
+  render();
+}
+function effectiveViewerId(){ return selectedViewerId() || state.players[0].id; }
+function renderViewerControl(){
+  const el=$('viewerSelect');
+  const selected=selectedViewerId();
+  el.replaceChildren();
+  const blank=document.createElement('option');blank.value='';blank.textContent='自分を選択';el.append(blank);
+  state.players.forEach(p=>{const o=document.createElement('option');o.value=p.id;o.textContent=p.name;el.append(o);});
+  el.value=selected;
+  const chips=$('viewerChoices'); chips.replaceChildren();
+  for(const p of state.players){
+    const button=document.createElement('button');
+    button.type='button';button.className='viewer-chip'+(selected===p.id?' selected':'');
+    button.setAttribute('aria-pressed',String(selected===p.id));
+    button.textContent=(selected===p.id?'✓ ':'')+p.name;
+    button.addEventListener('click',()=>chooseViewer(p.id));
+    chips.append(button);
+  }
+  $('viewerHelp').textContent=selected
+    ? `「${firstName(state,selected)}」からの視点：対面は上・上家は左・下家は右です。`
+    : '最初に「自分」を選んでください。選ぶまでは先頭のプレイヤーを下に仮表示します。';
+  $('viewerHelp').classList.toggle('needs-selection',!selected);
+}
+
+/** 焼き鳥：未アガリのときだけ表示する札。状態は従来の wonIds に従う。 */
+function makeYakitoriFuda(){
+  const mark=document.createElement('span');
+  mark.className='yakitori-fuda';
+  mark.textContent='';
+  mark.title='焼き鳥：まだアガっていません';
+  mark.setAttribute('role','img');
+  mark.setAttribute('aria-label','焼き鳥（未アガリ）');
+  return mark;
+}
+
+function renderSeat(position, person, leaderPoints) {
+  const el=$('tableSeat'+position.charAt(0).toUpperCase()+position.slice(1));
+  el.replaceChildren();
+  el.className='table-seat seat-'+position;
+  if(!person){
+    const empty=document.createElement('span');empty.className='seat-position';empty.textContent='席なし（3人麻雀）';
+    el.append(empty);el.classList.add('seat-empty');return;
+  }
+  const rank=state.players.filter(p=>p.points>person.points).length+1;
+  const tied=state.players.some(p=>p.id!==person.id&&p.points===person.points);
+  const captions={top:'対面',left:'上家',right:'下家',bottom:'自分'};
+  el.classList.toggle('is-leader',rank===1);
+  el.classList.toggle('is-dealer',person.id===state.dealerId);
+  el.classList.toggle('goal-exceeded',person.points>GOAL_POINTS);
+  el.classList.add(scoreColorClass(person.points));
+  el.classList.toggle('is-me',position==='bottom');
+  el.classList.toggle('is-riichi',(state.riichiIds||[]).includes(person.id));
+  const heading=document.createElement('div');heading.className='seat-heading';
+  const which=document.createElement('span');which.className='seat-position';which.textContent=captions[position];
+  const place=document.createElement('span');place.className='seat-rank';place.textContent=rank+'位'+(tied?' 同点':'');
+  heading.append(which);
+  if(person.id===state.dealerId){
+    const currentDealer=document.createElement('span');
+    currentDealer.className='seat-dealer-badge';
+    currentDealer.textContent='親';
+    currentDealer.setAttribute('aria-label','現在の親');
+    heading.append(currentDealer);
+  }
+  heading.append(place);
+  const name=document.createElement('div');name.className='seat-name';
+  const nameText=document.createElement('span');nameText.className='seat-name-text';nameText.textContent=person.name;
+  name.append(nameText);
+  if(!hasWon(state,person.id)){
+    name.append(makeYakitoriFuda());
+    el.classList.add('has-yakitori');
+  }
+  const points=document.createElement('strong');points.className='seat-points';points.textContent=yen(person.points);
+  const detail=document.createElement('div');detail.className='seat-detail';
+  detail.textContent=rank===1?(tied?'トップと同点':'現在トップ'):('トップまで '+yen(leaderPoints-person.points)+'点');
+  const tools=document.createElement('div');tools.className='seat-tools';
+  const tags=document.createElement('span');tags.className='seat-tags';
+  if(person.points >= GOAL_POINTS){const reached=document.createElement('span');reached.className='seat-tag goal-tag';reached.textContent='35,000到達';tags.append(reached);}
+  if((state.riichiIds||[]).includes(person.id)){const riichi=document.createElement('span');riichi.className='seat-tag riichi-tag';riichi.textContent='リーチ';tags.append(riichi);}
+  tools.append(tags);
+  el.append(heading,name,points,detail,tools);
+}
+
+function renderTable(leaderPoints){
+  renderViewerControl();
+  const count=state.players.length;
+  const current=state.players.findIndex(p=>p.id===effectiveViewerId());
+  // プレイヤー配列＝下家方向の座順。p+1=右、p+2=対面（4人）、p-1=左。
+  renderSeat('bottom',state.players[current],leaderPoints);
+  renderSeat('right',state.players[(current+1)%count],leaderPoints);
+  renderSeat('left',state.players[(current+count-1)%count],leaderPoints);
+  renderSeat('top',count===4?state.players[(current+2)%count]:null,leaderPoints);
+  $('centerHand').textContent=handStr(state);
+  $('centerHonba').textContent=String(state.honba);
+  $('centerSticks').textContent=String(state.sticks)+'本';
+  $('centerDealer').textContent='親：'+firstName(state,state.dealerId);
+  $('mahjongTable').hidden=scoreDisplay!=='table';
+  $('scoreGrid').hidden=scoreDisplay!=='list';
+  for(const [view,id] of [['table','tableViewButton'],['list','listViewButton']]){
+    const active=scoreDisplay===view;
+    $(id).classList.toggle('active',active);
+    $(id).setAttribute('aria-pressed',String(active));
+  }
+}
+
+
+const GOAL_POINTS = 35000;
+/** 卓・一覧・最終結果で共通の5段階カラー。35,000点ちょうどは白。 */
+function scoreColorClass(points) {
+  if (points <= 10000) return 'score-critical';
+  if (points < 20000) return 'score-warning';
+  if (points < 30000) return 'score-twenties';
+  if (points > GOAL_POINTS) return 'score-goal';
+  return 'score-normal';
+}
+
+function createInitial(count = 4, initial = 30000, names) {
+  const order=names ? [...names] : [...DEFAULT_MEMBERS.slice(0,count)];
+  if(!names){
+    for(let i=order.length-1;i>0;i--){
+      const j=Math.floor(Math.random()*(i+1));
+      [order[i],order[j]]=[order[j],order[i]];
+    }
+  }
+  return {
+    version: 1,
+    revision: 0,
+    players: Array.from({ length: count }, (_, i) => ({ id: 'p' + i, name: (order[i] || REGULAR_MEMBERS[i] || `プレイヤー${i + 1}`).trim(), points: initial })),
+    startingPoints: initial,
+    dealerId: 'p0',
+    handNo: 1,
+    honba: 0,
+    sticks: 0,
+    riichiIds: [],
+    wonIds: [],
+    endedAt: null,
+    history: [],
+    updatedAt: Date.now()
+  };
+}
+
+function validState(s) {
+  if (!s || s.version !== 1 || !Array.isArray(s.players) || ![3, 4].includes(s.players.length)) return false;
+  if (!s.players.every((p, i) => p.id === 'p' + i && typeof p.name === 'string' && p.name.trim().length > 0 && p.name.length <= 18 && Number.isSafeInteger(p.points) && Math.abs(p.points) <= 1000000)) return false;
+  return Number.isSafeInteger(s.startingPoints) && s.startingPoints >= 1000 && s.startingPoints <= 100000 &&
+    Number.isSafeInteger(s.honba) && s.honba >= 0 && s.honba <= 99 &&
+    Number.isSafeInteger(s.sticks) && s.sticks >= 0 && s.sticks <= 40 &&
+    Number.isSafeInteger(s.handNo) && s.handNo >= 1 && s.handNo <= 999 &&
+    Number.isSafeInteger(s.revision ?? 0) && (s.revision ?? 0) >= 0 &&
+    (!s.history || (Array.isArray(s.history) && s.history.length <= 40)) &&
+    (s.endedAt === undefined || s.endedAt === null || (Number.isSafeInteger(s.endedAt) && s.endedAt > 0)) &&
+    (s.lastAction === undefined || (s.lastAction && typeof s.lastAction === 'object' && typeof s.lastAction.label === 'string' && s.lastAction.label.length <= 180 && typeof s.lastAction.actorName === 'string' && s.lastAction.actorName.length <= 60 && typeof s.lastAction.clientId === 'string' && s.lastAction.clientId.length <= 100)) &&
+    (s.wonIds === undefined || (Array.isArray(s.wonIds) &&
+      new Set(s.wonIds).size === s.wonIds.length &&
+      s.wonIds.every(id => s.players.some(p=>p.id===id)))) &&
+    s.players.some(p => p.id === s.dealerId);
+}
+
+function markSaveFailed(){
+  saveFailed=true;
+  const banner=$('saveErrorBanner'); if(banner)banner.hidden=false;
+}
+function localSave(s) {
+  try {
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(s));
+    saveFailed=false;
+    const banner=$('saveErrorBanner');if(banner)banner.hidden=true;
+    return true;
+  } catch {
+    markSaveFailed();
+    return false;
+  }
+}
+function readPastResults(){
+  try{const list=JSON.parse(localStorage.getItem(RESULTS_STORAGE_KEY)||'[]');return Array.isArray(list)?list.filter(r=>r&&validState(r.game)).slice(-80):[];}
+  catch{return [];}
+}
+function archiveCompletedGame(s){
+  if(!s?.endedAt)return;
+  const key=(roomCode||'local')+':'+s.endedAt;
+  const current=readPastResults();
+  if(current.some(r=>r.key===key))return;
+  const archived={key,game:snapshot(s),room:roomCode||null};
+  archived.game.endedAt=s.endedAt;
+  try{localStorage.setItem(RESULTS_STORAGE_KEY,JSON.stringify([...current,archived].slice(-80)));}
+  catch {markSaveFailed();}
+}
+function renderPastResults(){
+  const list=$('pastResultsList');list.replaceChildren();
+  const games=readPastResults().slice().reverse();
+  if(!games.length){const p=document.createElement('p');p.className='archived-empty';p.textContent='保存済みの対局結果はまだありません。対局を終了すると、この端末に記録されます。';list.append(p);return;}
+  for(const record of games){
+    const game=record.game;
+    const block=document.createElement('article');block.className='archived-item';
+    const head=document.createElement('strong');head.textContent=new Date(game.endedAt).toLocaleString('ja-JP')+(record.room?' ／ 共有卓':' ／ 端末単独');block.append(head);
+    const sorted=[...game.players].sort((a,b)=>b.points-a.points);
+    for(const p of sorted){const item=document.createElement('p');const rank=1+game.players.filter(x=>x.points>p.points).length;item.textContent=`${rank}位 ${p.name}：${yen(p.points)}点 ${hasWon(game,p.id)?'アガリ済み':'焼き鳥'}`;block.append(item);}
+    list.append(block);
+  }
+}
+function updateOfflineReady() {
+  const label=$('offlineReadyText');
+  if(location.protocol==='file:') label.textContent='HTMLの直接起動でも単独操作はできますが、ホーム画面からのオフライン起動にはHTTPSで公開して初回アクセスしてください。';
+  else if(!('serviceWorker' in navigator)) label.textContent='このブラウザはオフライン起動機能に対応していません。対応ブラウザをご利用ください。';
+  else if(offlineCacheReady) label.textContent='✓ オフライン用ファイルの保存を確認しました。通信を切ってホーム画面から再起動してみてください。';
+  else label.textContent='オフライン起動を準備中です。初回はネット接続中に開き、準備完了を確認してください。';
+}
+async function verifyOfflineAssets(){
+  if(!('caches' in window))return false;
+  try{
+    const cache=await caches.open('takuten-static-v8-9-3');
+    return !!(await cache.match(new URL('./index.html',location.href))) &&
+           !!(await cache.match(new URL('./firebase-config.js',location.href)));
+  }catch{return false;}
+}
+function saveBackup() {
+  const backup={format:'takuten-backup',formatVersion:1,exportedAt:new Date().toISOString(),game:state,pastResults:readPastResults()};
+  const blob=new Blob([JSON.stringify(backup,null,2)],{type:'application/json'});
+  const link=document.createElement('a');
+  const url=URL.createObjectURL(blob);
+  link.href=url;link.download='takuten-'+new Date().toISOString().slice(0,10)+'.json';
+  document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  toast('バックアップを書き出しました');
+}
+async function loadBackup(file) {
+  if(!file)return;
+  if(roomCode || pendingRoomCode){toast('共有ルームから退出してから読み込んでください',true);return;}
+  try{
+    if(file.size>2000000)throw Error('ファイルサイズが大きすぎます。');
+    const backup=JSON.parse(await file.text());
+    if(backup?.format!=='takuten-backup'||backup.formatVersion!==1||!validState(backup.game))throw Error('卓点のバックアップではありません。');
+    if(!confirm('この端末の現在の点数と履歴を、バックアップの内容で置き換えますか？'))return;
+    const restored=clone(backup.game);
+    if(!localSave(restored))throw Error('保存先の空き容量などを確認してください。現在の対局は変更していません。');
+    state=restored;
+    if(Array.isArray(backup.pastResults)){
+      try{const items=backup.pastResults.filter(x=>x&&x.game&&validState(x.game)).slice(-80);localStorage.setItem(RESULTS_STORAGE_KEY,JSON.stringify(items));}catch{markSaveFailed();}
+    }
+    render();
+    $('extrasDialog').close();toast('バックアップを復元しました');
+  }catch(err){toast(err.message||'ファイルを読み込めませんでした',true);}
+}
+function localLoad() {
+  try {
+    const s = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if (validState(s)) {
+      // 旧版の未開始対局のみ、新しい30,000点スタートへ自動移行する。
+      // 進行中の対局は勝手に点数を変更しない。
+      if(s.startingPoints===25000 && s.players.every(p=>p.points===25000) &&
+          !s.history?.length && s.handNo===1 && s.honba===0 && s.sticks===0 && !(s.riichiIds||[]).length){
+        const upgraded={...s,startingPoints:30000,players:s.players.map(p=>({...p,points:30000}))};
+        localStorage.setItem(STORAGE_KEY,JSON.stringify(upgraded));
+        return upgraded;
+      }
+      // 旧バージョンの未設定名だけ置換。対局の点数・局・履歴は変更しない。
+      // 手動で付けた名前や共有ルームの既存名は変更しない。
+      if (s.players.every((p, i) => p.name === `プレイヤー${i + 1}`)) {
+        const migrated = { ...s, players: s.players.map((p, i) => ({ ...p, name: DEFAULT_MEMBERS[i] })) };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated));
+        return migrated;
+      }
+      return s;
+    }
+  } catch { /* 初回利用または保存不可 */ }
+  const newGame=createInitial();
+  localSave(newGame);
+  return newGame;
+}
+let state = localLoad();
+
+const clone = obj => JSON.parse(JSON.stringify(obj));
+function snapshot(s) {
+  const { version, players, startingPoints, dealerId, handNo, honba, sticks, riichiIds, wonIds, endedAt } = s;
+  return clone({ version, players, startingPoints, dealerId, handNo, honba, sticks, riichiIds, wonIds: wonIds || [], endedAt:endedAt || null });
+}
+function player(s, id) { return s.players.find(p => p.id === id); }
+function firstName(s, id) { return player(s, id)?.name || '不明'; }
+function timeStr(n) { return new Date(n).toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' }); }
+function handStr(s) {
+  const i = Math.max(0, s.handNo - 1);
+  const wind = winds[Math.min(3, Math.floor(i / s.players.length))];
+  return `${wind}${(i % s.players.length) + 1}局`;
+}
+// 南場・西場・北場の各最終局は、親がノーテンでも連荘する特別ルール。
+function isLastHand(s) {
+  const i=s.handNo-1, n=s.players.length;
+  const wind=Math.floor(i/n);
+  return wind>=1 && wind<=3 && i%n===n-1;
+}
+function currentWind(s){return Math.floor((s.handNo-1)/s.players.length);}
+function allBelowGoal(s){return s.players.every(p=>p.points<GOAL_POINTS);}
+// 親が流れるべき局、または子のアガリで次局へ進む場合の終局・延長判定。
+// オーラスは親がノーテンで流局しても呼ばれない（連荘を優先）。
+function advanceHandWithExtension(s) {
+  if(!isLastHand(s)){nextHand(s);return 'next';}
+  if(!allBelowGoal(s)){
+    s.endedAt=Date.now();
+    return 'finished';
+  }
+  if(currentWind(s)===3){
+    // 北4局を越えて風を増やさない。目標未達なら北4局のまま次の親へ。
+    const idx=s.players.findIndex(p=>p.id===s.dealerId);
+    s.dealerId=s.players[(idx+1)%s.players.length].id;
+    return 'north-repeat';
+  }
+  nextHand(s);return currentWind(s)===2?'west':'north';
+}
+function pointInput(id, min = 100) {
+  const n = Number($(id).value);
+  if (!Number.isSafeInteger(n) || n < min || n > 500000 || n % 100 !== 0) throw Error('点数は100点単位で正しく入力してください。');
+  return n;
+}
+function nextHand(s) {
+  const idx = s.players.findIndex(p => p.id === s.dealerId);
+  s.dealerId = s.players[(idx + 1) % s.players.length].id;
+  s.handNo += 1;
+}
+function finishWin(s, winnerId) {
+  // アガリが確定した瞬間に焼き鳥解除。undoは直前snapshotで元に戻る。
+  s.wonIds = [...new Set([...(s.wonIds || []), winnerId])];
+  s.riichiIds = [];
+  s.sticks = 0;
+  if (winnerId === s.dealerId) s.honba += 1;
+  else { s.honba = 0; advanceHandWithExtension(s); }
+}
+// 座席変更時は「その人の持ち点」が別人へ移らないよう、席を再配置する。
+// 座席番号 p0..p3 と順位の対応を維持しつつ、親/リーチは元の人を追いかける。
+function reseatPlayers(s, orderedNames) {
+  if (orderedNames.length !== s.players.length || new Set(orderedNames).size !== orderedNames.length ||
+      orderedNames.some(name => !s.players.some(p => p.name === name))) throw Error('席順が正しくありません。');
+  const byName = new Map(s.players.map(p => [p.name, p]));
+  const formerDealer = firstName(s, s.dealerId);
+  const formerRiichi = (s.riichiIds || []).map(id => firstName(s, id));
+  const formerWinners=(s.wonIds || []).map(id => firstName(s,id));
+  s.players = orderedNames.map((name,i) => ({ ...byName.get(name), id:'p'+i }));
+  s.dealerId = s.players.find(p=>p.name === formerDealer).id;
+  s.riichiIds = formerRiichi.map(name=>s.players.find(p=>p.name === name)?.id).filter(Boolean);
+  s.wonIds = formerWinners.map(name=>s.players.find(p=>p.name === name)?.id).filter(Boolean);
+}
+function changeState(s, label, mutation, actor = actorInfo()) {
+  if (!validState(s)) throw Error('データが読み込めません。');
+  const result = clone(s);
+  mutation(result);
+  if (!validState(result)) throw Error('不正な点数データです。');
+  result.history = label === '新しい対局を開始' ? [] : label === '対局を再開' ? [...(s.history || [])] : [...(s.history || []).slice(-39), { label, at: Date.now(), before: snapshot(s) }];
+  result.revision = (s.revision ?? 0) + 1;
+  result.updatedAt = Date.now();
+  result.lastAction = {label,actorName:actor.actorName,clientId:actor.clientId,at:result.updatedAt};
+  return result;
+}
+function canWrite() { return !pendingRoomCode && (!roomCode || (navigator.onLine && remote && roomReady && serverConnected)); }
+function writeGuard() {
+  if (busy) return false;
+  if (!canWrite()) {
+    toast('共有サーバーとの接続を確認できません。ネット接続をご確認ください。', true);
+    return false;
+  }
+  return true;
+}
+function pointMovementSummary(before,after,label){
+  if(!/^(ロン：|ツモ：|リーチ：|流局：|点数移動：)/.test(label))return '';
+  const changed=after.players.map(p=>{
+    const prev=before.players.find(x=>x.id===p.id);
+    return prev?{name:p.name,diff:p.points-prev.points}:null;
+  }).filter(p=>p&&p.diff!==0);
+  return changed.map(p=>p.name+' '+(p.diff>0?'+':'−')+yen(Math.abs(p.diff))+'点').join(' / ');
+}
+async function dispatch(label, mutation, options={}) {
+  if (!writeGuard()) return;
+  if(state.endedAt && !['新しい対局を開始','対局を再開'].includes(label)) {toast('対局終了済みです。最終結果から再開してください。',true);return;}
+  const detail=label.startsWith('ロン：') ? $('ronPreview').textContent : label.startsWith('ツモ：') ? $('tsumoPreview').textContent : label;
+  if(roomCode && !options.skipSharedConfirm && !confirm(`共有卓の全員に反映します。\n操作：${label}\n${detail}\n確定しますか？`))return;
+  const actor=actorInfo();
+  const expectedRevision = state.revision ?? 0;
+  const targetRoom = roomCode;
+  const oldStateForNotice=clone(state);
+  busy = true; toggleBusy(true);
+  try {
+    if (targetRoom) {
+      const result = await remote.runTransaction(remote.ref(remote.db, `rooms/${targetRoom}`), current => {
+        if (!validState(current)) return;
+        // 複数人が同時入力したとき、以前の点数や局で確定しない。
+        if ((current.revision ?? 0) !== expectedRevision) return;
+        return changeState(current, label, mutation, actor);
+      }, { applyLocally: false });
+      if (!result.committed) throw Error('他の人が先に更新しました。最新の点数を確認して、もう一度確定してください。');
+      if (roomCode !== targetRoom) throw Error('操作中にルームが切り替わりました。');
+      const next=result.snapshot.val();keepViewerIdentity(state,next);state=next;
+    } else {
+      const next=changeState(state,label,mutation,actor);
+      if(!localSave(next))throw Error('端末への保存に失敗しました。操作は確定していません。バックアップ機能をご確認ください。');
+      keepViewerIdentity(state,next);state=next;
+    }
+    if(label.startsWith('流局：')) $('tenpaiList').querySelectorAll('input').forEach(input=>{input.checked=false;});
+    render();
+    if($('actionDialog').open)$('actionDialog').close();
+    const change=pointMovementSummary(oldStateForNotice,state,label);
+    const newWind=currentWind(state),oldWind=currentWind(oldStateForNotice);
+    let extensionMessage='';
+    if(oldWind!==newWind && newWind===2) extensionMessage=' ／ 全員35,000点未満 → 西入';
+    if(oldWind!==newWind && newWind===3) extensionMessage=' ／ 全員35,000点未満 → 北入';
+    if(state.endedAt && !oldStateForNotice.endedAt) extensionMessage=' ／ 最終局を終了（35,000点到達者あり）';
+    toast((targetRoom?'全員に反映：':'記録：')+label+extensionMessage+(change?'\n'+change:''));
+    if(state.endedAt&&!oldStateForNotice.endedAt){renderResults();if($('resultsDialog').open===false) $('resultsDialog').showModal();}
+  } catch (err) {
+    toast(err.message || '更新に失敗しました', true);
+  } finally { busy = false; toggleBusy(false); }
+}
+function toggleBusy(isBusy) {
+  const lock = isBusy || !canWrite();
+  const ended=!!state.endedAt;
+  document.querySelectorAll('.tab-pane .btn.primary, #newGameButton, #resetAllToThirtyButton, #editParticipantsButton, #honbaMinus, #honbaPlus, .score-edit, #editSave').forEach(b => { b.disabled = lock || (ended && b.id!=='newGameButton' && b.id!=='resetAllToThirtyButton'); });
+  // Disable while a write is underway only. A finished game or disconnected room
+  // must remain tappable so that the user can see why scoring is unavailable.
+  document.querySelectorAll('.dock-btn[data-quick]:not([data-quick="extras"])').forEach(b=>{
+    b.disabled = !!isBusy;
+    b.title = ended ? '対局終了済み：タップして再開するか選べます'
+      : !canWrite() ? '共有通信を確認できません：タップすると案内を表示します'
+      : 'タップして点数を入力';
+  });
+  $('editFromExtrasButton').disabled=lock||ended;
+  $('finishGameButton').disabled=lock||ended;
+  $('undoButton').disabled = lock || ended || !state.history?.length;
+  $('syncHelp').hidden = !roomCode && !pendingRoomCode;
+  if (roomCode || pendingRoomCode) {
+    $('syncHelp').textContent = roomReady && serverConnected ? 'この卓は4人全員が操作できます。ほかの人が更新すると自動的に点数が変わります。' : '共有ルームを読み込み中、または通信が切断されています。再接続するまで点数を変更できません。';
+  }
+}
+function showNotice(message) {
+  $('notice').textContent = message;
+  $('notice').hidden = !message;
+}
+function toast(message, error = false) {
+  clearTimeout(toastTimer);
+  const t = $('toast'); t.textContent = message; t.style.background = error ? '#a34b58' : '#38715f'; t.hidden = false;
+  toastTimer = setTimeout(() => { t.hidden = true; }, 3500);
+}
+function updateSelect(id, chosen = null) {
+  const select = $(id), old = chosen ?? select.value;
+  select.replaceChildren(...state.players.map(p => {
+    const el = document.createElement('option'); el.value = p.id; el.textContent = p.name;
+    return el;
+  }));
+  if (state.players.some(p => p.id === old)) select.value = old;
+}
+function refreshSelects() {
+  ['ronWinner', 'ronLoser', 'tsumoWinner', 'riichiPlayer', 'transferFrom', 'transferTo', 'editFromExtrasPlayer'].forEach(id => updateSelect(id));
+  if ($('ronWinner').value === $('ronLoser').value) $('ronLoser').value = state.players.find(p => p.id !== $('ronWinner').value).id;
+  if ($('transferFrom').value === $('transferTo').value) $('transferTo').value = state.players.find(p => p.id !== $('transferFrom').value).id;
+  const list = $('tenpaiList');
+  const checkedIds = [...list.querySelectorAll('input:checked')].map(e => e.value);
+  list.replaceChildren(...state.players.map(p => {
+    const label = document.createElement('label');
+    const input = document.createElement('input'); input.type = 'checkbox'; input.value = p.id; input.checked = checkedIds.includes(p.id);
+    input.addEventListener('change', preview);
+    label.append(input, document.createTextNode(p.name)); return label;
+  }));
+}
+function renderResults(){
+  const list=$('resultsList'); list.replaceChildren();
+  const sorted=[...state.players].sort((a,b)=>b.points-a.points);
+  $('resultsTitle').textContent=state.endedAt?'最終結果':'現在の順位（未確定）';
+  $('resultsSummary').textContent=(state.endedAt?`終了：${new Date(state.endedAt).toLocaleString('ja-JP')} ／ `:'途中経過 ／ ')+`${handStr(state)} ／ 供託 ${state.sticks}本`;
+  sorted.forEach(p=>{
+    const row=document.createElement('div'); row.className='result-row';
+    const top=document.createElement('span'); top.className='result-rank';top.textContent=rankOf(state,p)+'位';
+    const middle=document.createElement('div');middle.className='result-person';
+    const name=document.createElement('strong');name.textContent=p.name;
+    const win=document.createElement('small');win.textContent=hasWon(state,p.id)?'アガリ済み':'焼き鳥（未アガリ）';
+    middle.append(name,win);
+    const points=document.createElement('div');points.className='result-points '+scoreColorClass(p.points);points.textContent=yen(p.points)+'点';
+    const plus=document.createElement('small');const d=p.points-state.startingPoints;plus.textContent=(d>0?'+':'')+yen(d)+'点（開始点比）';points.append(plus);
+    row.append(top,middle,points);list.append(row);
+  });
+  $('resumeGameButton').hidden=!state.endedAt;
+}
+function render() {
+  if(state.endedAt)archiveCompletedGame(state);
+  if($('saveErrorBanner'))$('saveErrorBanner').hidden=!saveFailed;
+  $('statusDot').classList.toggle('live', !!roomCode && navigator.onLine && roomReady && serverConnected);
+  $('statusLabel').textContent = pendingRoomCode ? (navigator.onLine ? '共有ルームに接続中' : 'オフライン · 共有は一時停止') : roomCode ? (navigator.onLine && serverConnected && roomReady ? '共有中 · 4人とも編集OK' : (navigator.onLine ? '共有切断中 · 編集は停止' : 'オフライン · 共有は停止')) : (navigator.onLine ? '端末内に自動保存 · オフライン対応' : 'オフライン · この端末だけで記録中');
+  $('roomChip').hidden = !roomCode && !pendingRoomCode;
+  if(state.endedAt && canWrite()) $('statusLabel').textContent='対局終了済み · ロン・ツモから再開を選べます';
+  $('finishedBanner').hidden=!state.endedAt;
+  $('finishGameButton').hidden=!!state.endedAt;
+  $('showResultsButton').textContent=state.endedAt?'確定済みの結果を見る':'途中順位を確認';
+  if($('resultsDialog').open)renderResults();
+  $('roomChip').textContent = roomCode || pendingRoomCode || '';
+  $('leaveRoomButton').hidden = !roomCode && !pendingRoomCode;
+  const leaderPoints = Math.max(...state.players.map(p => p.points));
+  if($('gapsDialog').open)renderGaps();
+  $('scoreGrid').replaceChildren(...state.players.map(p => {
+    const rank = state.players.filter(other => other.points > p.points).length + 1;
+    const tied = state.players.filter(other => other.points === p.points).length > 1;
+    const card = document.createElement('div');
+    card.className = `score-card ${rank === 1 ? 'leader' : ''} ${p.points > GOAL_POINTS ? 'goal-exceeded' : ''} ${scoreColorClass(p.points)}`;
+    const top = document.createElement('div'); top.className = 'player-line';
+    const name = document.createElement('span'); name.className = 'player-name';
+    const nameText = document.createElement('span'); nameText.className = 'player-name-text'; nameText.textContent = p.name;
+    name.append(nameText);
+    if(!hasWon(state,p.id))name.append(makeYakitoriFuda());
+    top.append(name);
+    if (p.id === state.dealerId) { const badge = document.createElement('span'); badge.className = 'badge-parent'; badge.textContent = '親'; top.append(badge); }
+    const points = document.createElement('span'); points.className = 'score'; points.textContent = yen(p.points);
+    const diff = p.points - state.startingPoints;
+    const delta = document.createElement('span'); delta.className = `delta ${diff < 0 ? 'negative' : ''}`;
+    delta.textContent = `${diff > 0 ? '+' : ''}${yen(diff)} / 開始点比`;
+    const difference = document.createElement('span'); difference.className = 'leader-difference';
+    difference.textContent = rank === 1 ? (tied ? 'トップと同点' : '現在トップ') : `トップまで ${yen(leaderPoints - p.points)}点`;
+    const goalNote=document.createElement('span');goalNote.className='goal-difference';
+    goalNote.textContent=p.points>=GOAL_POINTS?'★ 35,000点の目標到達':`目標35,000点まで あと${yen(GOAL_POINTS-p.points)}点`;
+    const posText = document.createElement('span'); posText.className = 'score-rank'; posText.textContent = `${rank}位${tied ? '（同点）' : ''}`;
+    const edit = document.createElement('button'); edit.type = 'button'; edit.className = 'score-edit';
+    edit.textContent = '✎ 修正'; edit.setAttribute('aria-label', `${p.name}の名前・持ち点を修正`);
+    edit.addEventListener('click', () => editPlayer(p.id));
+    card.append(top, points, delta, difference, goalNote, posText, edit);
+    return card;
+  }));
+  const participantSummary=$('participantsSummary');participantSummary.replaceChildren();
+  state.players.forEach((p,i)=>{const tag=document.createElement('span');tag.className='participant-pill';tag.textContent=winds[i]+' '+p.name;tag.title='開始時の'+winds[i]+'家';participantSummary.append(tag);});
+  renderTable(leaderPoints);
+  $('currentStartPoints').textContent=yen(state.startingPoints);
+  $('currentGoalPoints').textContent=yen(GOAL_POINTS);
+  $('handLabel').textContent = handStr(state);
+  $('centerHand').title = currentWind(state)>=2?'延長戦。最終局で全員35,000点未満なら次の場へ進みます。':'南場の最終局で全員35,000点未満なら西入します。';
+  $('dealerLabel').textContent = firstName(state, state.dealerId);
+  $('honbaLabel').textContent = String(state.honba);
+  $('sticksLabel').textContent = `${state.sticks}本`;
+  const expected = state.players.length * state.startingPoints;
+  const actual = state.players.reduce((sum,p) => sum + p.points, 0) + state.sticks * 1000;
+  $('totalLabel').textContent = `点数合計（供託含む）：${yen(actual)}点` + (actual !== expected ? ` ／ 開始時との差 ${actual > expected ? '+' : ''}${yen(actual - expected)}点` : '');
+  $('totalLabel').classList.toggle('negative', actual !== expected);
+  const difference=actual-expected, balance=$('balanceAlert');
+  balance.hidden=difference===0;
+  if(difference!==0){
+    balance.textContent=`⚠ 点数合計が一致しません：${yen(actual)}点（${difference>0?'+':''}${yen(difference)}点）／正しい合計 ${yen(expected)}点 ※供託込み。点棒を再確認してください。`;
+  }
+  $('undoButton').disabled = busy || !!state.endedAt || !state.history?.length;
+  const history = [...(state.history || [])].reverse().slice(0, 12);
+  const wrapper = $('historyList'); wrapper.replaceChildren();
+  if (!history.length) { const e = document.createElement('p'); e.className = 'history-empty'; e.textContent = 'まだ操作履歴がありません。'; wrapper.append(e); }
+  else history.forEach(h => { const item=document.createElement('div'); item.className='history-item'; const t=document.createElement('span'); t.textContent=h.label; const when=document.createElement('time'); when.textContent=timeStr(h.at); item.append(t,when); wrapper.append(item); });
+  refreshSelects();
+  preview();
+  toggleBusy(busy);
+}
+function automatedScore(kind) {
+  const winnerId = $(kind === 'ron' ? 'ronWinner' : 'tsumoWinner').value;
+  return scoreFromHanFu({ han: Number($(`${kind}Han`).value), fu: Number($(`${kind}Fu`).value), isDealer: winnerId === state.dealerId, method: kind });
+}
+function updateScoreMethod(kind) {
+  const useAuto = scoreMethod[kind] === 'auto';
+  $(`${kind}AutoFields`).hidden = !useAuto;
+  $(`${kind}ManualFields`).hidden = useAuto;
+  document.querySelectorAll(`.method-btn[data-kind="${kind}"]`).forEach(b => {
+    const active = b.dataset.method === scoreMethod[kind];
+    b.classList.toggle('active', active); b.setAttribute('aria-pressed', String(active));
+  });
+  preview();
+}
+function updateAutoScores() {
+  const valid = { ron: true, tsumo: true };
+  for (const kind of ['ron', 'tsumo']) {
+    const result = $(`${kind}AutoResult`);
+    if (scoreMethod[kind] !== 'auto') continue;
+    try {
+      const s = automatedScore(kind);
+      result.classList.remove('invalid');
+      if (kind === 'ron') {
+        $('ronPoints').value = String(s.ron);
+        result.textContent = `${s.grade}｜ロン ${yen(s.ron)}点（本場・供託は別）`;
+      } else {
+        $('tsumoChild').value = String(s.tsumoChild);
+        $('tsumoDealer').value = String(s.tsumoDealer);
+        const dealer = $('tsumoWinner').value === state.dealerId;
+        result.textContent = `${s.grade}｜${dealer ? `子から各${yen(s.tsumoChild)}点` : `子から${yen(s.tsumoChild)}点／親から${yen(s.tsumoDealer)}点`}（本場・供託は別）`;
+      }
+    } catch (e) {
+      valid[kind] = false;
+      result.classList.add('invalid'); result.textContent = e.message;
+    }
+  }
+  return valid;
+}
+function preview() {
+  const autoValid = updateAutoScores();
+  const base = Number($('ronPoints').value), w = $('ronWinner').value, l = $('ronLoser').value;
+  $('ronPreview').textContent = !autoValid.ron ? '符・翻の組み合わせを確認してください。' : Number.isFinite(base) && base >= 0 ? `${firstName(state, l)} → ${firstName(state,w)}：${yen(base + state.honba * 300)}点（${state.honba}本場込み）${state.sticks ? `＋供託${yen(state.sticks * 1000)}点` : ''}` : 'ロンの点数を入力してください';
+  const child = Number($('tsumoChild').value), parent = Number($('tsumoDealer').value), winner = $('tsumoWinner').value;
+  const parentWins = winner === state.dealerId;
+  $('tsumoDealerLabel').classList.toggle('field-inactive', parentWins);
+  $('tsumoDealer').disabled = parentWins; // 手入力では親がアガったとき、この欄は不要
+
+  const payments = state.players.filter(p => p.id !== winner).map(p => `${p.name} ${yen((p.id === state.dealerId ? parent : child) + state.honba * 100)}点`);
+  if (winner === state.dealerId) payments.splice(0,payments.length,...state.players.filter(p => p.id !== winner).map(p => `${p.name} ${yen(child + state.honba * 100)}点`));
+  $('tsumoPreview').textContent = !autoValid.tsumo ? '符・翻の組み合わせを確認してください。' : `支払い：${payments.join('／')}（本場込み）${state.sticks ? `＋供託${yen(state.sticks * 1000)}点` : ''}`;
+  const tenpaiIds=[...$('tenpaiList').querySelectorAll('input:checked')].map(el=>el.value);
+  const parentTenpai=tenpaiIds.includes(state.dealerId);
+  const last=isLastHand(state);
+  const outcome=last?'親はテンパイ・ノーテンに関係なく連荘（最終局特別ルール）':parentTenpai?'親がテンパイ → 連荘':'親がノーテン → 次の人が親';
+  $('drawParentGuide').textContent=`親：${firstName(state,state.dealerId)} ／ ${outcome}`;
+  const payment=state.players.length===4?'不聴罰符3,000点をテンパイ者・ノーテン者間で自動精算。':'3人麻雀の不聴罰符は自動精算しません。';
+  $('drawHint').textContent=`${payment} 本場＋1。${last?'親がノーテンでも最終局はそのまま継続。':''}`;
+}
+function editPlayer(id) {
+  if (!writeGuard()) return;
+  const p = player(state, id);
+  if (!p) return;
+  $('editId').value = id; $('editName').value = p.name; $('editPoints').value = p.points;
+  setEditMethod('manual');
+  document.querySelectorAll('.stick-count').forEach(input => { input.value = '0'; });
+  updateStickTotal();
+  $('editDialog').showModal();
+}
+function setEditMethod(method) {
+  editMethod = method;
+  $('editManualFields').hidden = method !== 'manual';
+  $('editStickFields').hidden = method !== 'sticks';
+  $('editPoints').required = method === 'manual';
+  document.querySelectorAll('[data-edit-method]').forEach(b => {
+    const active = b.dataset.editMethod === method;
+    b.classList.toggle('active', active); b.setAttribute('aria-pressed', String(active));
+  });
+  updateEditWarning();
+}
+function getStickCounts() {
+  const counts = {};
+  for (const value of STICK_VALUES) {
+    const raw = $(`stick-${value}`).value;
+    if (!/^\d+$/.test(raw)) throw Error('本数は0以上の整数で入力してください。');
+    counts[value] = Number(raw);
+  }
+  return counts;
+}
+function updateStickTotal() {
+  try {
+    const counts = getStickCounts();
+    const total = countSticks(counts);
+    $('stickTotal').textContent = yen(total) + '点';
+    const previous = player(state, $('editId').value)?.points ?? 0;
+    const diff = total - previous;
+    $('stickDelta').textContent = `現在の登録点数との差：${diff > 0 ? '+' : ''}${yen(diff)}点`;
+  } catch(e) {
+    $('stickTotal').textContent = '入力エラー';
+    $('stickDelta').textContent = e.message;
+  }
+  updateEditWarning();
+}
+function updateEditWarning() {
+  const p = player(state, $('editId').value);
+  if (!p) return;
+  let newPoints;
+  try { newPoints = editMethod === 'sticks' ? countSticks(getStickCounts()) : Number($('editPoints').value); }
+  catch { $('editWarning').textContent = '点棒の本数を確認してください。'; return; }
+  $('editWarning').textContent = newPoints !== p.points ? `注意：${p.name}の持ち点を${yen(p.points)}点から${yen(newPoints)}点へ直接修正します。点数合計が変わる場合があります。` : '持ち点に変更はありません。名前の変更も保存できます。';
+}
+function initSticks() {
+  const root = $('stickRows'); root.replaceChildren();
+  for (const value of STICK_VALUES) {
+    const row = document.createElement('div'); row.className = 'stick-row';
+    const label = document.createElement('div'); label.className = 'stick-denom'; label.textContent = `${yen(value)}点棒`;
+    const subtotal = document.createElement('span'); subtotal.className = 'stick-subtotal'; subtotal.id = `subtotal-${value}`;
+    label.append(subtotal);
+    const input = document.createElement('input'); input.className = 'stick-count'; input.id = `stick-${value}`;
+    input.type = 'number'; input.min = '0'; input.max = '200'; input.step = '1'; input.inputMode = 'numeric'; input.value = '0';
+    input.setAttribute('aria-label', `${yen(value)}点棒の本数`);
+    const minus = document.createElement('button'); minus.type = 'button'; minus.className = 'stick-step'; minus.textContent = '−'; minus.setAttribute('aria-label', `${yen(value)}点棒を1本減らす`);
+    const plus = document.createElement('button'); plus.type = 'button'; plus.className = 'stick-step'; plus.textContent = '＋'; plus.setAttribute('aria-label', `${yen(value)}点棒を1本増やす`);
+    function show() {
+      const count = Number(input.value);
+      subtotal.textContent = Number.isInteger(count) && count >= 0 ? `${yen(count * value)}点` : '本数を確認';
+      updateStickTotal();
+    }
+    minus.addEventListener('click', () => { input.value = String(Math.max(0, Number(input.value) - 1 || 0)); show(); });
+    plus.addEventListener('click', () => { input.value = String(Math.min(200, Math.max(0, Number(input.value) || 0) + 1)); show(); });
+    input.addEventListener('input', show);
+    row.append(label, minus, input, plus); root.append(row);
+    show();
+  }
+}
+
+function currentSetupNames() {
+  return Array.from($('setupNames').querySelectorAll('input'), input => input.value.trim());
+}
+function setupNameInputs(suggested = state.players.map(p => p.name)) {
+  const count = Number($('setupCount').value), el = $('setupNames');
+  const names = suggested.slice(0, count);
+  while (names.length < count) names.push(DEFAULT_MEMBERS.find(n => !names.includes(n)) || REGULAR_MEMBERS.find(n => !names.includes(n)) || '');
+  el.replaceChildren();
+  for (let i=0; i<count; i++) {
+    const label = document.createElement('label'); label.textContent = `参加者${i+1}の名前`;
+    const input = document.createElement('input'); input.id = `name${i}`; input.type = 'text'; input.maxLength=18;
+    input.required=true; input.autocomplete='off'; input.value=names[i] || '';
+    input.addEventListener('input', ()=>{replacementCandidate=null;updateRosterChoices();});
+    label.append(input); el.append(label);
+  }
+  updateRosterChoices();
+}
+function cancelRosterReplacement(){
+  replacementCandidate=null;
+  updateRosterChoices();
+}
+function openRosterReplacement(name){
+  replacementCandidate=name;
+  updateRosterChoices();
+  const target=$('rosterReplacePanel');
+  target.scrollIntoView({block:'nearest',behavior:'smooth'});
+}
+function updateRosterChoices() {
+  const names=currentSetupNames();
+  const count=Number($('setupCount').value);
+  $('setupCountLabel').textContent = `${names.filter(Boolean).length}/${count}人`;
+  const group=$('rosterChoices'); group.replaceChildren();
+  const selectedCount=names.filter(Boolean).length;
+  for (const name of REGULAR_MEMBERS) {
+    const selected=names.includes(name);
+    const button=document.createElement('button');button.type='button';
+    button.className='roster-chip'+(selected?' chosen':'')+(replacementCandidate===name?' pending':'');
+    button.setAttribute('aria-pressed',String(selected));
+    button.textContent=(selected?'✓ ':'＋ ')+name;
+    button.addEventListener('click',()=>{
+      const fields=[...$('setupNames').querySelectorAll('input')];
+      const matching=fields.find(input=>input.value.trim()===name);
+      if(replacementCandidate){
+        if(matching){ matching.value=replacementCandidate; replacementCandidate=null;updateRosterChoices(); }
+        else if(name===replacementCandidate) cancelRosterReplacement();
+        else openRosterReplacement(name);
+      } else if(matching){matching.value='';updateRosterChoices();}
+      else {
+        const empty=fields.find(input=>!input.value.trim());
+        if(empty){empty.value=name;updateRosterChoices();}
+        else openRosterReplacement(name);
+      }
+    });
+    group.append(button);
+  }
+  const panel=$('rosterReplacePanel');
+  panel.hidden=!replacementCandidate;
+  renderSeatAssignments();
+  if(!replacementCandidate)return;
+  $('rosterReplaceMessage').textContent=`「${replacementCandidate}」と交代する人を選んでください。現在の座順を保ったまま入れ替えます。`;
+  const targetList=$('rosterReplaceTargets');targetList.replaceChildren();
+  for(const existing of names.filter(Boolean)){
+    const target=document.createElement('button');target.type='button';target.className='replace-target';
+    target.textContent=existing+' と交代';
+    target.addEventListener('click',()=>{
+      const field=[...$('setupNames').querySelectorAll('input')].find(input=>input.value.trim()===existing);
+      if(field)field.value=replacementCandidate;
+      replacementCandidate=null;updateRosterChoices();
+    });
+    targetList.append(target);
+  }
+}
+// 参加する人と席を分離。メンバーの入れ替え時も確定済みの席をできるだけ保持する。
+function syncSeatDraft(){
+  const members=currentSetupNames().filter(Boolean), count=Number($('setupCount').value);
+  const next=Array.from({length:count},(_,i)=>members.includes(seatOrderDraft[i])?seatOrderDraft[i]:null);
+  const occupied=new Set(next.filter(Boolean));
+  for(let i=0;i<count;i++)if(!next[i]){
+    const available=members.find(n=>!occupied.has(n));
+    if(available){next[i]=available;occupied.add(available);}
+  }
+  seatOrderDraft=next;
+}
+function renderSeatAssignments(){
+  const root=$('seatAssignments');if(!root)return;
+  syncSeatDraft();
+  const names=currentSetupNames().filter(Boolean), count=Number($('setupCount').value);
+  root.replaceChildren();
+  for(let i=0;i<count;i++){
+    const row=document.createElement('label');row.className='seat-assign-row';
+    const seat=document.createElement('span');seat.className='seat-wind'+(i===0?' dealer':'');
+    seat.textContent=winds[i]+'家'+(i===0?' ★最初の親':'');
+    const select=document.createElement('select');select.className='seat-select';
+    select.setAttribute('aria-label',winds[i]+'家に座る人');
+    for(const n of names){const option=document.createElement('option');option.value=n;option.textContent=n;select.append(option);}
+    if(!seatOrderDraft[i]){const blank=document.createElement('option');blank.value='';blank.textContent='参加者を選択';select.prepend(blank);}
+    select.value=seatOrderDraft[i]||'';
+    select.addEventListener('change',()=>{
+      const previous=seatOrderDraft[i], other=seatOrderDraft.indexOf(select.value);
+      if(other!==-1 && other!==i)seatOrderDraft[other]=previous;
+      seatOrderDraft[i]=select.value;
+      renderSeatAssignments();
+    });
+    row.append(seat,select);root.append(row);
+  }
+  $('seatOrderSummary').textContent=seatOrderDraft.length===count && seatOrderDraft.every(Boolean)
+    ? `最初の親：${seatOrderDraft[0]} ｜ ${seatOrderDraft.map((n,i)=>winds[i]+' '+n).join(' → ')}`
+    : '先に参加するメンバーを選んでください。';
+}
+function encodeSnapshot(s) {
+  const text = JSON.stringify(snapshot(s));
+  const bytes = new TextEncoder().encode(text);
+  return btoa(String.fromCharCode(...bytes)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/g,'');
+}
+function decodeSnapshot(token) {
+  const base64 = token.replace(/-/g,'+').replace(/_/g,'/');
+  const binary = atob(base64); const bytes = Uint8Array.from(binary, c => c.charCodeAt(0));
+  const s = JSON.parse(new TextDecoder().decode(bytes));
+  if (!validState(s)) throw Error('共有データの形式が正しくありません。');
+  return { ...s, history: [], updatedAt: Date.now() };
+}
+function shareLink() {
+  if (!['https:', 'http:'].includes(location.protocol)) return '';
+  const path = location.href.split('#')[0];
+  return roomCode ? `${path}#room=${roomCode}` : `${path}#snapshot=${encodeSnapshot(state)}`;
+}
+function openShare() {
+  if (!roomCode && remote) {
+    openRoomDialog();
+    toast('まず共有ルームを作成してください');
+    return;
+  }
+  const live = !!roomCode;
+  $('shareDescription').textContent = live ? `このURLをLINEなどで送ると、相手も同じルーム「${roomCode}」に入り、全員が現在の点数を見たり更新したりできます。` : 'これは点数の「その時点のコピー」です。共有後の更新は相手の画面に自動反映されません。リアルタイム共有にはFirebase設定と共有ルームが必要です。';
+  const link = shareLink();
+  $('shareUrl').value = link || '公開URLがありません（GitHub Pages等で公開してください）';
+  $('copyShare').disabled = !link;
+  $('nativeShare').disabled = !link;
+  $('shareDialog').showModal();
+}
+function attachEvents() {
+  $('viewerSelect').addEventListener('change',e=>chooseViewer(e.target.value));
+  $('saveErrorBackup').addEventListener('click',saveBackup);
+  $('editFromExtrasButton').addEventListener('click',()=>{
+    if(!writeGuard() || state.endedAt)return;
+    const id=$('editFromExtrasPlayer').value;
+    if(!player(state,id)){toast('修正する人を選んでください。',true);return;}
+    if($('extrasDialog').open)$('extrasDialog').close();
+    editPlayer(id);
+  });
+  $('pastResultsButton').addEventListener('click',()=>{renderPastResults();$('extrasDialog').close();$('pastResultsDialog').showModal();});
+  $('dismissSharedAction').addEventListener('click',()=>{$('sharedActionBanner').hidden=true;});
+  const showResults=()=>{renderResults();if($('extrasDialog').open)$('extrasDialog').close();$('resultsDialog').showModal();};
+  $('showResultsButton').addEventListener('click',showResults);
+  $('openFinishedResults').addEventListener('click',showResults);
+  $('finishGameButton').addEventListener('click',()=>{
+    if(!writeGuard() || state.endedAt)return;
+    const sum=state.players.reduce((n,p)=>n+p.points,0)+state.sticks*1000, expected=state.players.length*state.startingPoints;
+    const warning=sum!==expected?'\n⚠ 点数合計が一致していません。点棒を確認してください。':'';
+    if(!confirm(`この対局を終了し、結果を確定しますか？\n終了後はロン・ツモ等の入力を停止します。再開することはできます。${warning}`))return;
+    dispatch('対局を終了',s=>{s.endedAt=Date.now();},{skipSharedConfirm:true}).then(()=>{if(state.endedAt){renderResults();if($('extrasDialog').open)$('extrasDialog').close();$('resultsDialog').showModal();}});
+  });
+  $('resumeGameButton').addEventListener('click',()=>{
+    if(!state.endedAt||!confirm('確定済みの対局を再開し、点数の入力を再び許可しますか？'))return;
+    dispatch('対局を再開',s=>{s.endedAt=null;},{skipSharedConfirm:true}).then(()=>{if(!state.endedAt){$('resultsDialog').close();}});
+  });
+  [['tableViewButton','table'],['listViewButton','list']].forEach(([id,view])=>{
+    $(id).addEventListener('click',()=>{
+      scoreDisplay=view;
+      try{localStorage.setItem(DISPLAY_KEY,view);}catch{}
+      render();
+    });
+  });
+
+  $('tabs').addEventListener('click',e => {
+    const tab = e.target.closest('[data-tab]'); if (!tab) return;
+    mode = tab.dataset.tab;
+    document.querySelectorAll('.tab').forEach(t => { t.classList.toggle('active', t.dataset.tab === mode); t.setAttribute('aria-selected', String(t.dataset.tab === mode)); });
+    document.querySelectorAll('.tab-pane').forEach(p => { p.classList.toggle('active', p.id === 'pane-'+mode); p.hidden = p.id !== 'pane-'+mode; });
+    document.querySelectorAll('.dock-btn[data-quick]').forEach(b => {
+      if (b.dataset.quick === 'share') return;
+      b.classList.toggle('active', b.dataset.quick === mode);
+      b.setAttribute('aria-pressed', String(b.dataset.quick === mode));
+    });
+    preview();
+  });
+  // 卓から直接入力ダイアログを開く。画面下の重複フォームへスクロールしない。
+  $('gapsButton').addEventListener('click',()=>{renderGaps();$('gapsDialog').showModal();});
+  // The dock is never silently inactive. Explain disconnected/finished games
+  // and allow deliberate continuation without clearing previous point totals.
+  function openDockInput(kind) {
+    if(kind==='draw')$('tenpaiList').querySelectorAll('input').forEach(input=>{input.checked=false;});
+    const tab=document.querySelector(`.tab[data-tab="${kind}"]`);
+    if(!tab){toast('入力画面を開けません。再読み込みしてください。',true);return;}
+    tab.click();
+    if(!$('actionDialog').open)$('actionDialog').showModal();
+  }
+  $('quickDock').addEventListener('click', e => {
+    const target = e.target.closest('[data-quick]');
+    if(!target)return;
+    const kind=target.dataset.quick;
+    if(kind==='extras'){$('extrasDialog').showModal();return;}
+    if(busy){toast('前の点数操作を処理中です。少しお待ちください。',true);return;}
+    if(!canWrite()){
+      const message = pendingRoomCode
+        ? '共有ルームの読み込み中です。通信が回復するまで点数入力はできません。'
+        : roomCode
+          ? '共有ルームに接続できていません。ネット接続とFirebaseの設定を確認してください。点数の食い違いを防ぐため、入力は停止しています。'
+          : '現在点数を更新できません。ページを読み込み直してください。';
+      alert(message);
+      return;
+    }
+    if(state.endedAt){
+      const name=({ron:'ロン',tsumo:'ツモ',riichi:'リーチ',draw:'流局'})[kind]||'点数';
+      const confirmResume=confirm(`この対局は終了済みです。\n以前の点数を残したまま対局を再開し、「${name}」を入力しますか？\n\nキャンセルした場合は最終結果を表示します。`);
+      if(!confirmResume){renderResults();if(!$('resultsDialog').open)$('resultsDialog').showModal();return;}
+      dispatch('対局を再開',s=>{s.endedAt=null;},{skipSharedConfirm:true}).then(()=>{
+        if(!state.endedAt && canWrite() && !busy)openDockInput(kind);
+        else if(state.endedAt)toast('対局を再開できませんでした。通信状態を確認してください。',true);
+      });
+      return;
+    }
+    openDockInput(kind);
+  });
+  document.querySelectorAll('.preset-row').forEach(row => row.addEventListener('click', e => {
+    const btn = e.target.closest('[data-points]'); if (!btn) return;
+    $(row.dataset.target).value = btn.dataset.points; preview();
+  }));
+  ['ronWinner','ronLoser','ronPoints','tsumoWinner','tsumoChild','tsumoDealer','ronFu','ronHan','tsumoFu','tsumoHan'].forEach(id => $(id).addEventListener('input', preview));
+  document.querySelectorAll('[data-method][data-kind]').forEach(b => b.addEventListener('click', () => {
+    scoreMethod[b.dataset.kind] = b.dataset.method;
+    updateScoreMethod(b.dataset.kind);
+  }));
+  document.querySelectorAll('[data-edit-method]').forEach(b => b.addEventListener('click', () => setEditMethod(b.dataset.editMethod)));
+  $('editPoints').addEventListener('input', updateEditWarning);
+  $('stickClear').addEventListener('click', () => {
+    document.querySelectorAll('.stick-count').forEach(input => { input.value = '0'; });
+    for (const value of STICK_VALUES) $(`subtotal-${value}`).textContent = '0点';
+    updateStickTotal();
+  });
+  $('ronSubmit').addEventListener('click', () => {
+    try {
+      if (scoreMethod.ron === 'auto') automatedScore('ron');
+      const who=$('ronWinner').value, from=$('ronLoser').value, base=pointInput('ronPoints');
+      if (who === from) throw Error('アガった人と放銃した人は別にしてください。');
+      if (base + state.honba * 300 >= 8000 && !confirm(`高額の支払いです。\n${firstName(state,from)} → ${firstName(state,who)}：${yen(base + state.honba*300)}点\n確定しますか？`)) return;
+      dispatch('ロン：'+firstName(state,who)+' ＋'+yen(base+state.honba*300+state.sticks*1000),s=>{
+        const n=base+s.honba*300;
+        player(s,from).points-=n; player(s,who).points+=n+s.sticks*1000;
+        finishWin(s,who);
+      });
+    } catch (err) { toast(err.message,true); }
+  });
+  $('tsumoSubmit').addEventListener('click', () => {
+    try {
+      if (scoreMethod.tsumo === 'auto') automatedScore('tsumo');
+      const who=$('tsumoWinner').value, child=pointInput('tsumoChild'), dealer=who===state.dealerId ? child : pointInput('tsumoDealer');
+      const totalPay = state.players.filter(p => p.id !== who).reduce((sum, p) => sum + (who === state.dealerId || p.id !== state.dealerId ? child : dealer) + state.honba*100, 0);
+      if (totalPay >= 8000 && !confirm(`高額のツモです。\n${firstName(state,who)}：支払合計 ${yen(totalPay)}点\n確定しますか？`)) return;
+      dispatch('ツモ：'+firstName(state,who),s=>{
+        let gain=s.sticks*1000;
+        for (const p of s.players) if (p.id!==who) {
+          const pay=(who===s.dealerId || p.id!==s.dealerId ? child : dealer)+s.honba*100;
+          p.points -= pay; gain += pay;
+        }
+        player(s,who).points += gain;
+        finishWin(s,who);
+      });
+    } catch (err) { toast(err.message,true); }
+  });
+  $('riichiSubmit').addEventListener('click',()=>{
+    const id=$('riichiPlayer').value;
+    dispatch('リーチ：'+firstName(state,id)+' −1,000',s=>{
+      if(s.riichiIds?.includes(id)) throw Error('同じ局で2回リーチはできません。');
+      if(player(s,id).points < 1000) throw Error('持ち点が1,000点未満のため、リーチできません。');
+      player(s,id).points-=1000; s.sticks+=1; s.riichiIds=[...(s.riichiIds||[]),id];
+    });
+  });
+  $('transferSubmit').addEventListener('click',()=>{
+    try {
+      const from=$('transferFrom').value,to=$('transferTo').value,n=pointInput('transferPoints');
+      if(from===to) throw Error('支払う人と受け取る人は別にしてください。');
+      if(n>=8000 && !confirm(`大きな点数移動です。\n${firstName(state,from)} → ${firstName(state,to)}：${yen(n)}点\n確定しますか？`)) return;
+      dispatch('点数移動：'+firstName(state,from)+' → '+firstName(state,to)+' '+yen(n),s=>{player(s,from).points-=n;player(s,to).points+=n;});
+    } catch (err) {toast(err.message,true);}
+  });
+  $('drawSubmit').addEventListener('click',()=>{
+    const ids=[...$('tenpaiList').querySelectorAll('input:checked')].map(el=>el.value);
+    const parentTenpai=ids.includes(state.dealerId);
+    const special=isLastHand(state);
+    const result=special?'最終局のため親が連荘':parentTenpai?'親テンパイのため連荘':'親ノーテンのため親流れ';
+    dispatch('流局：テンパイ'+ids.length+'人（'+result+'）',s=>{
+      const c=s.players.length;
+      if(c===4 && ids.length>0 && ids.length<4) {
+        const get=3000/ids.length, pay=3000/(4-ids.length);
+        s.players.forEach(p=>{p.points+=ids.includes(p.id)?get:-pay;});
+      }
+      s.honba+=1; s.riichiIds=[];
+      // 確定時の最新状態で再判定し、他端末からの変更とも矛盾しないようにする。
+      if(!isLastHand(s) && !ids.includes(s.dealerId)) advanceHandWithExtension(s);
+    });
+  });
+  $('honbaMinus').addEventListener('click',()=>dispatch('本場を−1',s=>{if(s.honba<1)throw Error('これ以上減らせません。');s.honba--; }));
+  $('honbaPlus').addEventListener('click',()=>dispatch('本場を＋1',s=>{if(s.honba>=99)throw Error('本場は99までです。');s.honba++;}));
+  $('undoButton').addEventListener('click',()=>{
+    if (!state.history?.length || state.endedAt) return;
+    if (!confirm('直前の操作を取り消しますか？')) return;
+    if (!writeGuard()) return;
+    const expectedRevision = state.revision ?? 0;
+    const targetRoom = roomCode;
+    // undoもトランザクション内で最新の履歴を確認する
+    busy=true;toggleBusy(true);
+    const execute=s=>{
+      if (!s.history?.length) throw Error('取り消せる操作がありません。');
+      const h=s.history[s.history.length-1];
+      const now=Date.now();const actor=actorInfo();return { ...clone(h.before),history:s.history.slice(0,-1),revision:(s.revision ?? 0)+1,updatedAt:now,lastAction:{label:'取り消し：'+h.label,actorName:actor.actorName,clientId:actor.clientId,at:now} };
+    };
+    (async()=>{
+      try {
+        if(targetRoom){const ret=await remote.runTransaction(remote.ref(remote.db,'rooms/'+targetRoom),cur=>validState(cur)&&(cur.revision??0)===expectedRevision?execute(cur):undefined,{applyLocally:false});if(!ret.committed)throw Error('他の人が先に更新しました。最新の点数を確認してください。');state=ret.snapshot.val();}
+        else {const next=execute(state);if(!localSave(next))throw Error('端末への保存に失敗したため取り消しを中止しました。');keepViewerIdentity(state,next);state=next;}
+        render();toast('直前の操作を取り消しました');
+      }catch(err){toast(err.message,true);}finally{busy=false;toggleBusy(false);}
+    })();
+  });
+  $('editForm').addEventListener('submit', e => {
+    e.preventDefault();
+    try {
+      const id = $('editId').value, name = $('editName').value.trim();
+      const points = editMethod === 'sticks' ? countSticks(getStickCounts()) : Number($('editPoints').value);
+      if (!name) throw Error('名前を入力してください。');
+      if (!Number.isSafeInteger(points) || points % 100 !== 0 || Math.abs(points) > 1000000) throw Error('点数は100点単位で入力してください。');
+      const original = player(state, id);
+      if (!original) throw Error('プレイヤーが見つかりません。');
+      if (state.players.some(p => p.id !== id && p.name === name)) throw Error('同じ名前のプレイヤーがいます。');
+      if (original.points === points && original.name === name) { $('editDialog').close(); return; }
+      const info = `「${original.name}」の変更内容：\n${yen(original.points)}点 → ${yen(points)}点${original.name !== name ? `\n名前 → ${name}` : ''}\n\n${roomCode ? '共有卓の全員にも反映されます。' : 'この端末の点数が更新されます。'}確定しますか？`;
+      if (!confirm(info)) return;
+      $('editDialog').close();
+      dispatch(`${editMethod === 'sticks' ? '点棒集計' : '修正'}：${name} ${yen(points)}点`, s => {
+        const current = player(s, id); if (!current) throw Error('プレイヤーが見つかりません。');
+        current.name = name; current.points = points;
+      });
+    } catch (err) { toast(err.message, true); }
+  });
+  const openParticipants=(forceNewGame=false)=>{
+    if(!writeGuard())return;
+    setupForceNewGame=forceNewGame;
+    $('newGameDialog').querySelector('h2').textContent=forceNewGame?'新しい対局を開始':'参加者・席順の設定';
+    $('newGameDialog').querySelector('p.tiny').textContent=forceNewGame?
+      '同じメンバー・席順でも持ち点と進行状況を初期化して新しい対局を始めます。':
+      '席だけを変更する場合は持ち点・親・本場・リーチ状態を維持します。参加者・人数・開始点数を変えると初期化します。';
+    $('setupSubmit').textContent=forceNewGame?'新しい対局を開始':'変更内容を確認';
+    replacementCandidate=null;
+    $('setupCount').value=String(state.players.length);
+    $('setupPoints').value=String(state.startingPoints===25000 ? 30000 : state.startingPoints);
+    seatOrderDraft=state.players.map(p=>p.name);
+    setupNameInputs();
+    if($('extrasDialog').open)$('extrasDialog').close();
+    $('newGameDialog').showModal();
+  };
+  $('resetAllToThirtyButton').addEventListener('click', async()=>{
+    if(!writeGuard())return;
+    const participants=state.players.map(p=>p.name);
+    const message='全員30,000点に戻して新しい対局を開始しますか？\n\n'+
+      '残す：参加者・東南西北の座席、過去に保存した最終結果\n'+
+      '初期化：点数、親（東家から）、局・本場・供託、リーチ、焼き鳥、現在の操作履歴\n\n'+
+      '現在の対局は未終了の場合、最終結果として保存されません。';
+    if(!confirm(message))return;
+    if(!writeGuard())return;
+    const newGame=createInitial(state.players.length,30000,participants);
+    if($('extrasDialog').open)$('extrasDialog').close();
+    await dispatch('新しい対局を開始',s=>Object.assign(s,newGame),{skipSharedConfirm:true});
+  });
+  $('newGameButton').addEventListener('click',()=>openParticipants(true));
+  $('editParticipantsButton').addEventListener('click',()=>openParticipants(false));
+  $('changeSeatButton').addEventListener('click',()=>openParticipants(false));
+  $('rosterReplaceCancel').addEventListener('click',cancelRosterReplacement);
+  $('setupCount').addEventListener('change',()=>{
+    replacementCandidate=null;const typedNames = currentSetupNames();
+    setupNameInputs(typedNames);
+  });
+  $('newGameForm').addEventListener('submit',e=>{
+    e.preventDefault();const count=Number($('setupCount').value),initial=Number($('setupPoints').value);
+    if(!Number.isSafeInteger(initial)||initial<1000||initial>100000||initial%1000!==0){toast('開始点数は1,000点単位で設定してください',true);return;}
+    const names=currentSetupNames();
+    if(names.length!==count || names.some(n=>!n)){toast('参加する全員の名前を入力してください',true);return;}
+    if(new Set(names).size !== names.length){toast('同じ名前は重複して選べません',true);return;}
+    syncSeatDraft();
+    const ordered=seatOrderDraft.slice(0,count);
+    if(ordered.some(n=>!n) || new Set(ordered).size!==count || ordered.some(n=>!names.includes(n))){toast('全員の座席を指定してください',true);return;}
+    const samePlayers=count===state.players.length && initial===state.startingPoints &&
+      ordered.every(name => state.players.some(p=>p.name===name));
+    const seatChanged=ordered.some((name,i)=>state.players[i].name!==name);
+    if(samePlayers && !setupForceNewGame && !seatChanged){$('newGameDialog').close();toast('メンバーと席順は変更されていません');return;}
+    if(samePlayers && !setupForceNewGame){
+      const namesAndPoints=ordered.map(name=>{
+        const p=state.players.find(player=>player.name===name);
+        return `${name} ${yen(p.points)}点`;
+      });
+      if(!confirm(`席順だけを変更します。\n${ordered.map((n,i)=>winds[i]+'家 '+n).join(' / ')}\n\n点数・局数・親・本場・供託・リーチ状態は維持します。\n${namesAndPoints.join(' / ')}\n\n確定しますか？`))return;
+      // 操作履歴に座席変更を保存し、取り消せるようにする。
+      $('newGameDialog').close();
+      dispatch('席順を変更',s=>reseatPlayers(s,ordered));
+      return;
+    }
+    const fresh=createInitial(count,initial,ordered);
+    if(!confirm(`席順：${ordered.map((n,i)=>winds[i]+' '+n).join(' / ')}\n最初の親：${ordered[0]}\n開始点数：${yen(initial)}点・目標：${yen(GOAL_POINTS)}点\n\n現在の対局と履歴をリセットして、新しい対局を開始しますか？`))return;
+    $('newGameDialog').close();
+    if(roomCode)dispatch('新しい対局を開始',s=>Object.assign(s,fresh));
+    else if (!pendingRoomCode) {if(!localSave(fresh)){toast('保存できないため新しい対局を開始できません。',true);return;}keepViewerIdentity(state,fresh);state=fresh;render();toast('新しい対局を開始しました');}
+  });
+  document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',() => $(b.dataset.close).close()));
+  $('shareButton').addEventListener('click',openShare);
+  $('copyShare').addEventListener('click',async()=>{
+    try {await navigator.clipboard.writeText(shareLink());toast('URLをコピーしました');}
+    catch { $('shareUrl').focus();$('shareUrl').select();toast('URLを選択しました。コピーしてください。'); }
+  });
+  $('nativeShare').addEventListener('click',async()=>{
+    const url=shareLink(); if(!url)return;
+    if(navigator.share){try{await navigator.share({title:'麻雀の点数を共有',text:roomCode?'同じ卓の点数をリアルタイムで見よう！':'現在の点数を共有します（更新は自動同期されません）',url});}catch {/* キャンセル */}}
+    else { try{await navigator.clipboard.writeText(url);toast('URLをコピーしました');}catch{toast('上のURLをコピーしてください');} }
+  });
+  $('backupSave').addEventListener('click',saveBackup);
+  $('backupOpen').addEventListener('click',()=>$('backupFile').click());
+  $('backupFile').addEventListener('change', async event=>{
+    const file=event.target.files?.[0];event.target.value='';
+    await loadBackup(file);
+  });
+  $('connectButton').addEventListener('click',openRoomDialog);
+  $('createRoomButton').addEventListener('click',createRoom);
+  $('joinRoomButton').addEventListener('click',()=>joinRoom($('joinCode').value.trim().toUpperCase()));
+  $('leaveRoomButton').addEventListener('click',()=>{if(!confirm('共有ルームから退出しますか？ この端末の保存済みの点数に戻ります。'))return;stopRoom();state=localLoad();history.replaceState(null,'',location.pathname+location.search);$('roomDialog').close();showNotice('');render();toast('この端末の記録に戻りました');});
+}
+function openRoomDialog() {
+  $('roomGuide').textContent = !navigator.onLine ? '現在オフラインです。この端末での点数管理はできますが、複数スマホの同期はできません。ネット接続後に共有ルームをご利用ください。' : remote ? '共有URLを開いた4人全員が操作できます。変更は自動反映され、同時確定は競合を確認します。' : 'Firebaseの初期設定（匿名認証・Realtime Database）が必要です。付属の設定手順をご覧ください。' + (firebaseError ? '\n' + firebaseError : '');
+  $('createRoomButton').disabled=!remote || !navigator.onLine;
+  $('joinRoomButton').disabled=!remote || !navigator.onLine;
+  $('joinCode').value=roomCode||'';
+  $('roomDialog').showModal();
+}
+function stopRoom() {
+  if(stopWatching){stopWatching();stopWatching=null;}
+  roomCode=null;
+  pendingRoomCode=null;
+  roomReady=false;
+}
+const CODE_CHARACTERS='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+function newCode() {const a=new Uint8Array(10);crypto.getRandomValues(a);return [...a].map(x=>CODE_CHARACTERS[x % CODE_CHARACTERS.length]).join('');}
+function roomUrl(code) {return location.href.split('#')[0]+'#room='+code;}
+function startWatching(code) {
+  stopRoom();
+  roomCode=code;
+  roomReady=false;
+  history.replaceState(null,'',roomUrl(code));
+  showNotice('共有ルームの最新の点数を読み込んでいます。');
+  stopWatching=remote.onValue(remote.ref(remote.db,'rooms/'+code),snap=>{
+    const current=snap.val();
+    if(validState(current)) {
+      const previousRevision = roomReady ? state.revision ?? 0 : null;
+      const changedByOther=previousRevision!==null && previousRevision !== (current.revision??0) && current.lastAction?.clientId !== CLIENT_ID;
+      keepViewerIdentity(state,current);state=current;
+      roomReady=true;
+      showNotice('');
+      render();
+      if(changedByOther){
+        for(const id of ['actionDialog','editDialog','newGameDialog']){if($(id).open)$(id).close();}
+        informOtherPlayers(current.lastAction || {label:'点数が変更されました',actorName:'ほかの参加者'});
+      }
+      if(previousRevision !== null && previousRevision !== (current.revision ?? 0) && !busy) {
+        $('statusLabel').textContent = serverConnected ? '最新の点数に更新しました' : '切断中 · 編集は一時停止';
+      }
+    } else {
+      roomReady=false;
+      showNotice('共有ルームが見つからないか、データが正しくありません。ルーム番号を確認してください。');
+      render();
+    }
+  }, err=>{
+    roomReady=false;
+    showNotice('リアルタイム共有でエラーが発生しました：'+err.message);
+    render();
+  });
+  render();
+}
+async function createRoom() {
+  if(!remote){toast('Firebaseが設定されていません',true);return;}
+  if(busy)return;
+  if(!serverConnected){toast('ネット接続を確認してからルームを作成してください',true);return;}
+  $('createRoomButton').disabled=true;
+  try {
+    let code, result;
+    for(let i=0;i<3;i++) {
+      code=newCode();
+      result=await remote.runTransaction(remote.ref(remote.db,'rooms/'+code),cur=>cur===null?clone(state):undefined,{applyLocally:false});
+      if(result.committed)break;
+    }
+    if(!result?.committed) throw Error('共有ルームを作れませんでした。');
+    startWatching(code);
+    $('roomDialog').close();
+    toast('共有ルームを作成しました');
+    openShare();
+  }catch(err){toast('ルーム作成失敗：'+err.message,true);}finally{$('createRoomButton').disabled=false;}
+}
+async function joinRoom(code) {
+  if(!remote){toast('Firebaseの初期設定が必要です',true);return;}
+  if(!/^[A-Z2-9]{10}$/.test(code)){toast('10文字のルーム番号を入力してください',true);return;}
+  $('joinRoomButton').disabled=true;
+  try {
+    const snap=await remote.get(remote.ref(remote.db,'rooms/'+code));
+    if(!snap.exists()||!validState(snap.val()))throw Error('この番号のルームは見つかりませんでした。');
+    startWatching(code);
+    $('roomDialog').close();toast('ルームに参加しました');
+  }catch(err){toast(err.message,true);}finally{$('joinRoomButton').disabled=false;}
+}
+async function bootFirebase() {
+  if(firebaseBooting || remote || !navigator.onLine || !firebaseConfig.apiKey || !firebaseConfig.databaseURL || !firebaseConfig.projectId) return;
+  firebaseBooting=true;
+  try {
+    const base=`https://www.gstatic.com/firebasejs/${FIREBASE_VERSION}`;
+    const [appMod,authMod,dbMod]=await Promise.all([import(`${base}/firebase-app.js`),import(`${base}/firebase-auth.js`),import(`${base}/firebase-database.js`)]);
+    const app=appMod.initializeApp(firebaseConfig);
+    const auth=authMod.getAuth(app);
+    await authMod.signInAnonymously(auth);
+    const db=dbMod.getDatabase(app);
+    remote={db,ref:dbMod.ref,get:dbMod.get,onValue:dbMod.onValue,runTransaction:dbMod.runTransaction};
+    dbMod.onValue(dbMod.ref(db, '.info/connected'), snap => {
+      serverConnected = snap.val() === true;
+      render();
+      if(roomCode && !serverConnected) showNotice('接続が切れています。復帰するまで共有操作は停止します。');
+      else if(roomCode && roomReady) showNotice('');
+    });
+    const urlRoom=new URLSearchParams(location.hash.slice(1)).get('room');
+    if(urlRoom)await joinRoom(urlRoom.toUpperCase());
+    else {showNotice('');}
+  }catch(err){firebaseError=err.message;showNotice('リアルタイム共有に接続できません。Firebaseの設定・匿名認証・DBルールを確認してください。');render();}
+  finally{firebaseBooting=false;}
+}
+function initPointCalculator() {
+  for (const kind of ['ron', 'tsumo']) {
+    const fu = $(`${kind}Fu`), han = $(`${kind}Han`);
+    for (const value of FU_VALUES) { const o = document.createElement('option'); o.value = value; o.textContent = `${value}符`; fu.append(o); }
+    for (let value = 1; value <= 13; value++) { const o = document.createElement('option'); o.value = value; o.textContent = value === 13 ? '13翻以上' : `${value}翻`; han.append(o); }
+    fu.value = '30'; han.value = '3';
+  }
+}
+function boot() {
+  initPointCalculator(); initSticks();
+  // スナップショットの読み込みで、この端末の保存済みゲームを黙って上書きしない。
+  const args=new URLSearchParams(location.hash.slice(1)),snapshotToken=args.get('snapshot');
+  if(snapshotToken){
+    try {
+      const imported = decodeSnapshot(snapshotToken);
+      if (localStorage.getItem(STORAGE_KEY) && !confirm('共有された点数を読み込むと、この端末に保存した対局が置き換わります。読み込みますか？')) {
+        showNotice('共有された点数の読み込みをキャンセルしました。');
+      } else {
+        if(!localSave(imported))throw Error('端末に保存できませんでした。');
+        state=imported;
+        showNotice('共有時点の点数を読み込みました。これ以降の更新はこの端末のみに反映されます。');
+      }
+      history.replaceState(null,'',location.pathname+location.search);
+    } catch { showNotice('共有された点数を読み込めませんでした。'); }
+  }
+  else if(args.get('room') && !navigator.onLine)showNotice('ネットに接続できません。共有ルームは通信回復後に読み込みます。単独モードへ自動で切り替えません。');
+  else if(args.get('room') && !firebaseConfig.apiKey)showNotice('共有ルームの設定がありません。Firebaseを設定するまで編集できません。');
+  attachEvents();render();updateOfflineReady();bootFirebase();
+  window.addEventListener('online',()=>{render();if(!remote)bootFirebase();});
+  window.addEventListener('offline',()=>{render();if(roomCode||pendingRoomCode)showNotice('オフラインの間、共有ルームでは点数を変更できません。端末単独の記録には自動で切り替えません。');});
+  // HTTPS公開（またはlocalhost）で初回オンライン起動するとアプリ一式をキャッシュする。
+  // file://ではService Workerを登録できない。4台共有はオンライン時のみ利用可能。
+  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+    navigator.serviceWorker.register('./service-worker.js')
+      .then(async registration=>{
+        await navigator.serviceWorker.ready;
+        offlineCacheReady=await verifyOfflineAssets();
+        updateOfflineReady();
+        // 公開後の更新を検知。自動リロードせず、対局中の入力を保護する。
+        if(navigator.onLine)registration.update().catch(()=>{});
+      })
+      .catch(()=>{offlineCacheReady=false;updateOfflineReady();});
+    navigator.serviceWorker.addEventListener('controllerchange', async()=>{
+      offlineCacheReady=await verifyOfflineAssets();updateOfflineReady();
+      if(navigator.onLine && !sessionStorage.getItem('takuten-v891-update-notice')){
+        sessionStorage.setItem('takuten-v891-update-notice','1');
+        $('updateBanner').hidden=false;
+      }
+    });
+    $('updateReload').addEventListener('click',()=>location.reload());
+  }
+}
+boot();
+
+</script>
+</body>
+</html>
